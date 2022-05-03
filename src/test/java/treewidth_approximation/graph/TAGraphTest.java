@@ -2,14 +2,12 @@ package treewidth_approximation.graph;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GraphTest {
+public class TAGraphTest {
     @Test
     void testVertexAddition() {
-        Graph g = new GraphImpl();
+        TAGraph g = new TAGraphImpl();
 
         g.addVertex(11);
         g.addVertex(13);
@@ -21,9 +19,9 @@ public class GraphTest {
 
     @Test
     void testVertexRemoval() {
-        Graph g = new GraphImpl();
+        TAGraph g = new TAGraphImpl();
         g.addVertex(11);
-        Vertex removed = g.addVertex(13);
+        TAVertex removed = g.addVertex(13);
 
         g.removeVertex(removed);
 

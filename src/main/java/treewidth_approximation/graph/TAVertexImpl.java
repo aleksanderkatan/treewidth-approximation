@@ -3,11 +3,11 @@ package treewidth_approximation.graph;
 import java.util.HashSet;
 import java.util.Set;
 
-public class VertexImpl implements Vertex {
-    private final Set<Vertex> neighbours;
+public class TAVertexImpl implements TAVertex {
+    private final Set<TAVertex> neighbours;
     private final int id;
 
-    public VertexImpl(int id) {
+    public TAVertexImpl(int id) {
         this.id = id;
         neighbours = new HashSet<>();
     }
@@ -18,17 +18,17 @@ public class VertexImpl implements Vertex {
     }
 
     @Override
-    public Set<Vertex> getNeighbours() {
+    public Set<TAVertex> getNeighbours() {
         return neighbours;
     }
 
     @Override
-    public void addNeighbour(Vertex neighbour) {
+    public void addNeighbour(TAVertex neighbour) {
         neighbours.add(neighbour);
     }
 
     @Override
-    public void removeNeighbour(Vertex neighbour) {
+    public void removeNeighbour(TAVertex neighbour) {
         neighbours.remove(neighbour);
     }
 }
