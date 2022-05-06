@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class TAVertexImpl implements TAVertex {
     private final Set<TAVertex> neighbours;
-    private final int id;
+    private int id;
 
     public TAVertexImpl(int id) {
         this.id = id;
@@ -15,6 +15,11 @@ public class TAVertexImpl implements TAVertex {
     @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

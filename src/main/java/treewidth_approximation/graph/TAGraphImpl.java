@@ -21,6 +21,19 @@ public class TAGraphImpl implements TAGraph {
     }
 
     @Override
+    public void normalizeIds() {
+        Collection<TAVertex> temp = getVertices();
+        vertices = new HashMap<>();
+
+        int i = 0;
+        for (TAVertex v : temp) {
+            v.setId(i);
+            vertices.put(i, v);
+            i++;
+        }
+    }
+
+    @Override
     public TAVertex addVertex(int id) {
         TAVertex newVertex = new TAVertexImpl(id);
         vertices.put(id, newVertex);
@@ -35,6 +48,11 @@ public class TAGraphImpl implements TAGraph {
     }
 
     @Override
+    public void removeVertex(int vertexId) {
+        vertices.remove(vertexId);
+    }
+
+    @Override
     public void addEdge(TAVertex first, TAVertex second) {
         if (first == second) return;
         if (first.getNeighbours().contains(second)) return;
@@ -43,8 +61,18 @@ public class TAGraphImpl implements TAGraph {
     }
 
     @Override
+    public void addEdge(int firstId, int secondId) {
+        addEdge(vertices.get(firstId), vertices.get(secondId));
+    }
+
+    @Override
     public void removeEdge(TAVertex first, TAVertex second) {
         first.removeNeighbour(second);
         second.removeNeighbour(first);
+    }
+
+    @Override
+    public void removeEdge(int firstId, int secondId) {
+        removeEdge(vertices.get(firstId), vertices.get(secondId));
     }
 }
