@@ -5,8 +5,6 @@ import treewidth_approximation.graph.TAVertex;
 
 import java.util.*;
 
-import static java.util.stream.Collectors.toList;
-
 public class FlowNetwork {
     private static final Integer INFINITY = 1<<30;
     private static class Edge {
@@ -33,10 +31,14 @@ public class FlowNetwork {
         }
     }
 
+    public static class FlowNotMaximalException extends RuntimeException {}
+
     private List<Vertex> vertices; // [0] - source, [1] - target
     private Map<Integer, Integer> idToIndex; // inIndex of a vertex
+    private List<Integer> separatorIds;
 
     public FlowNetwork(TAGraph graph, Set<TAVertex> A, Set<TAVertex> B) {
+        // assumes there are no edges between A and B
         vertices = new ArrayList<>();
         idToIndex = new HashMap<>();
 
@@ -105,7 +107,7 @@ public class FlowNetwork {
         }
     }
 
-    private boolean increaseFlow() {
+    private List<Edge> BFS() {
         List<Edge> edgeThatGotToVertex = new ArrayList<>();
         for (int i = 0; i< vertices.size(); i++) edgeThatGotToVertex.add(null);
 
@@ -126,9 +128,21 @@ public class FlowNetwork {
                 }
             }
         }
+        return edgeThatGotToVertex;
+    }
 
-        if (edgeThatGotToVertex.get(1) == null)
+    private boolean increaseFlowByOne() {
+        List<Edge> edgeThatGotToVertex = BFS();
+
+        if (edgeThatGotToVertex.get(1) == null) { // max flow = min cut
+            separatorIds = new ArrayList<>();
+            for (int i = 2; i< vertices.size(); i+=2) {
+                if (edgeThatGotToVertex.get(i) != null && edgeThatGotToVertex.get(i+1) == null) {
+                    separatorIds.add(vertices.get(i).id);
+                }
+            }
             return false;
+        }
 
         int current = 1;
         while (current != 0) {
@@ -144,11 +158,21 @@ public class FlowNetwork {
         return true;
     }
 
-    public int findMaxFlow(int limit) {
-        for (int i = 0; i< limit; i++) {
-            boolean succeeded = increaseFlow();
-            if (!succeeded) return i;
+    public int increaseCurrentFlow(int incrementLimit) {
+        int result = 0;
+        for (int i = 0; i< incrementLimit; i++) {
+            boolean succeeded = increaseFlowByOne();
+            if (!succeeded) {
+                break;
+            }
+            result = i+1;
         }
-        return limit;
+
+        return result;
+    }
+
+    public List<Integer> getSeparatorIds() throws FlowNotMaximalException {
+        if (separatorIds == null) throw new FlowNotMaximalException();
+        return separatorIds;
     }
 }

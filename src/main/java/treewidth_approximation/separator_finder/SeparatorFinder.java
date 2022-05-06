@@ -6,9 +6,8 @@ import treewidth_approximation.graph.TAVertex;
 import java.util.Set;
 
 public class SeparatorFinder {
-    Set<TAVertex> findSeparator(TAGraph graph, Set<TAVertex> A, Set<TAVertex> B, int maxSize) {
-        // finds a separator of A and B, that does not contain vertices from either of the sets
-        // returns either the separator or null if no separator exists
+    Set<TAVertex> findSeparator(TAGraph graph, Set<TAVertex> W, int k) {
+        // finds a balanced separator for W of size k or smaller
 
 //        // check if there are edges between sets
 //        for (TAVertex v : A) {
