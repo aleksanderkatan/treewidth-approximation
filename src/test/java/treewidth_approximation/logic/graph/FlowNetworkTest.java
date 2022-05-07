@@ -1,7 +1,7 @@
-package treewidth_approximation.graph;
+package treewidth_approximation.logic.graph;
 
 import org.junit.jupiter.api.Test;
-import treewidth_approximation.separator_finder.FlowNetwork;
+import treewidth_approximation.logic.separator_finder.FlowNetwork;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,10 +17,10 @@ public class FlowNetworkTest {
         g.addVertex(20);
         g.addVertex(30);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(10));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(30));
+        Set<Integer> A = new HashSet<>();
+        A.add(10);
+        Set<Integer> B = new HashSet<>();
+        B.add(30);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 
@@ -34,16 +34,16 @@ public class FlowNetworkTest {
     @Test
     void testPath() {
         TAGraph g = new TAGraphImpl();
-        g.addVertex(10);
-        g.addVertex(20);
         g.addVertex(30);
+        g.addVertex(20);
+        g.addVertex(10);
         g.addEdge(10, 20);
         g.addEdge(20, 30);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(10));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(30));
+        Set<Integer> A = new HashSet<>();
+        A.add(10);
+        Set<Integer> B = new HashSet<>();
+        B.add(30);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 
@@ -66,10 +66,10 @@ public class FlowNetworkTest {
         g.addEdge(1, 3);
         g.addEdge(3, 4);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(1));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(4));
+        Set<Integer> A = new HashSet<>();
+        A.add(1);
+        Set<Integer> B = new HashSet<>();
+        B.add(4);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 
@@ -94,12 +94,12 @@ public class FlowNetworkTest {
         g.addEdge(4, 5);
         g.addEdge(5, 6);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(1));
-        A.add(g.getVertexById(4));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(3));
-        B.add(g.getVertexById(6));
+        Set<Integer> A = new HashSet<>();
+        A.add(1);
+        A.add(4);
+        Set<Integer> B = new HashSet<>();
+        B.add(3);
+        B.add(6);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 
@@ -127,10 +127,10 @@ public class FlowNetworkTest {
         g.addEdge(2, 6);
         g.addEdge(6, 4);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(1));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(4));
+        Set<Integer> A = new HashSet<>();
+        A.add(1);
+        Set<Integer> B = new HashSet<>();
+        B.add(4);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 
@@ -161,14 +161,14 @@ public class FlowNetworkTest {
         g.addEdge(5, 7);
         g.addEdge(5, 8);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(1));
-        A.add(g.getVertexById(2));
-        A.add(g.getVertexById(3));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(6));
-        B.add(g.getVertexById(7));
-        B.add(g.getVertexById(8));
+        Set<Integer> A = new HashSet<>();
+        A.add(1);
+        A.add(2);
+        A.add(3);
+        Set<Integer> B = new HashSet<>();
+        B.add(6);
+        B.add(7);
+        B.add(8);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 
@@ -193,12 +193,12 @@ public class FlowNetworkTest {
         g.addEdge(4, 5);
         g.addEdge(5, 6);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(1));
-        A.add(g.getVertexById(4));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(3));
-        B.add(g.getVertexById(6));
+        Set<Integer> A = new HashSet<>();
+        A.add(1);
+        A.add(4);
+        Set<Integer> B = new HashSet<>();
+        B.add(3);
+        B.add(6);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 
@@ -218,10 +218,10 @@ public class FlowNetworkTest {
         g.addEdge(1, 2);
         g.addEdge(2, 3);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(1));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(3));
+        Set<Integer> A = new HashSet<>();
+        A.add(1);
+        Set<Integer> B = new HashSet<>();
+        B.add(3);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 
@@ -239,10 +239,10 @@ public class FlowNetworkTest {
         g.addEdge(1, 2);
         g.addEdge(2, 3);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(1));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(3));
+        Set<Integer> A = new HashSet<>();
+        A.add(1);
+        Set<Integer> B = new HashSet<>();
+        B.add(3);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 
@@ -277,14 +277,14 @@ public class FlowNetworkTest {
         g.addEdge(5, 8);
         g.addEdge(5, 9);
 
-        Set<TAVertex> A = new HashSet<>();
-        A.add(g.getVertexById(1));
-        A.add(g.getVertexById(2));
-        A.add(g.getVertexById(3));
-        Set<TAVertex> B = new HashSet<>();
-        B.add(g.getVertexById(7));
-        B.add(g.getVertexById(8));
-        B.add(g.getVertexById(9));
+        Set<Integer> A = new HashSet<>();
+        A.add(1);
+        A.add(2);
+        A.add(3);
+        Set<Integer> B = new HashSet<>();
+        B.add(7);
+        B.add(8);
+        B.add(9);
 
         FlowNetwork network = new FlowNetwork(g, A, B);
 

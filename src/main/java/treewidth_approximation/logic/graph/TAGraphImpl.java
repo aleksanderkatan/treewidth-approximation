@@ -1,4 +1,4 @@
-package treewidth_approximation.graph;
+package treewidth_approximation.logic.graph;
 
 import java.util.*;
 
@@ -74,5 +74,26 @@ public class TAGraphImpl implements TAGraph {
     @Override
     public void removeEdge(int firstId, int secondId) {
         removeEdge(vertices.get(firstId), vertices.get(secondId));
+    }
+
+    @Override
+    public TAGraph copyRestricting(Set<Integer> restricted) {
+        TAGraph result = new TAGraphImpl();
+        List<TAVertex> originalVertices = new ArrayList<>(getVertices());
+
+        for (TAVertex v : originalVertices) {
+            if (restricted.contains(v.getId())) continue;
+            result.addVertex(v.getId());
+        }
+
+        for (TAVertex v : originalVertices) {
+            if (restricted.contains(v.getId())) continue;
+            for (TAVertex n : v.getNeighbours()) {
+                if (restricted.contains(n.getId())) continue;
+                result.addEdge(v.getId(), n.getId());
+            }
+        }
+
+        return result;
     }
 }

@@ -1,7 +1,7 @@
-package treewidth_approximation.separator_finder;
+package treewidth_approximation.logic.separator_finder;
 
-import treewidth_approximation.graph.TAGraph;
-import treewidth_approximation.graph.TAVertex;
+import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.graph.TAVertex;
 
 import java.util.*;
 
@@ -33,14 +33,14 @@ public class FlowNetwork {
 
     public static class FlowNotMaximalException extends RuntimeException {}
 
-    private List<Vertex> vertices; // [0] - source, [1] - target
-    private Map<Integer, Integer> idToIndex; // inIndex of a vertex
+    private final List<Vertex> vertices; // [0] - source, [1] - target
     private List<Integer> separatorIds;
 
-    public FlowNetwork(TAGraph graph, Set<TAVertex> A, Set<TAVertex> B) {
+    public FlowNetwork(TAGraph graph, Set<Integer> A, Set<Integer> B) {
         // assumes there are no edges between A and B
         vertices = new ArrayList<>();
-        idToIndex = new HashMap<>();
+        // inIndex of a vertex
+        Map<Integer, Integer> idToIndex = new HashMap<>();
 
         Vertex source = new Vertex(-1);
         Vertex target = new Vertex(-2);
@@ -60,13 +60,13 @@ public class FlowNetwork {
 
             int betweenCapacity = 1;
 
-            if (A.contains(v)) {
+            if (A.contains(v.getId())) {
                 Edge edgeSV = new Edge(0, indexIn, INFINITY);
                 source.edges.add(edgeSV);
                 in.edges.add(edgeSV);
                 betweenCapacity = INFINITY;
             }
-            if (B.contains(v)) {
+            if (B.contains(v.getId())) {
                 Edge edgeVT = new Edge(indexOut, 1, INFINITY);
                 out.edges.add(edgeVT);
                 target.edges.add(edgeVT);

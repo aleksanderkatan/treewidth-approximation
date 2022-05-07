@@ -1,4 +1,4 @@
-package treewidth_approximation.graph;
+package treewidth_approximation.logic.graph;
 
 import java.util.HashSet;
 import java.util.Set;
