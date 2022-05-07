@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class SeparatorFinder {
     public static class NoSeparatorExistsException extends Exception {}
@@ -16,8 +15,11 @@ public class SeparatorFinder {
     public static Set<Integer> findSeparatorIds(TAGraph graph, Set<Integer> W, int order) throws NoSeparatorExistsException {
         // finds a balanced separator for W of size order or smaller
 
+        int third = (W.size()+2)/3;
+        List<Integer> limits = List.of(2*third, 2*third, order);
+
         PartitionExecutor<Integer, List<Integer>> executor =
-                new PartitionExecutor<>(new ArrayList<>(W), 3, (partition) -> {
+                new PartitionExecutor<>(new ArrayList<>(W), 3, limits, (partition) -> {
                     List<Integer> A = partition.get(0);
                     List<Integer> B = partition.get(1);
                     List<Integer> C = partition.get(2);
@@ -36,21 +38,21 @@ public class SeparatorFinder {
                         }
                     }
 
-                    StringBuilder s = new StringBuilder();
-                    s.append("Currently checking: A = { ");
-                    for (Integer integer : A) {
-                        s.append(integer).append(" ");
-                    }
-                    s.append("}, B = { ");
-                    for (Integer integer : B) {
-                        s.append(integer).append(" ");
-                    }
-                    s.append("}, C = { ");
-                    for (Integer integer : C) {
-                        s.append(integer).append(" ");
-                    }
-                    s.append("}");
-                    System.out.println(s);
+//                    StringBuilder s = new StringBuilder();
+//                    s.append("Currently checking: A = { ");
+//                    for (Integer integer : A) {
+//                        s.append(integer).append(" ");
+//                    }
+//                    s.append("}, B = { ");
+//                    for (Integer integer : B) {
+//                        s.append(integer).append(" ");
+//                    }
+//                    s.append("}, C = { ");
+//                    for (Integer integer : C) {
+//                        s.append(integer).append(" ");
+//                    }
+//                    s.append("}");
+//                    System.out.println(s);
 
                     Set<Integer> ASet = new HashSet<>(A);
                     Set<Integer> BSet = new HashSet<>(B);
@@ -61,8 +63,8 @@ public class SeparatorFinder {
                     int maxSeparatorSize = order - C.size();
                     int maxFlow = network.increaseCurrentFlow(maxSeparatorSize + 1);
                     if (maxFlow > maxSeparatorSize) return null;
-                    System.out.println("Check successful");
-                    System.out.println("Max flow: " + maxFlow);
+//                    System.out.println("Check successful");
+//                    System.out.println("Max flow: " + maxFlow);
                     List<Integer> result = new ArrayList<>(network.getSeparatorIds());
                     result.addAll(C);
 

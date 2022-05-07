@@ -28,6 +28,33 @@ public class RandomGraphProviderImpl implements RandomGraphProvider {
     }
 
     @Override
+    public TAGraph getGridSubgraph(int x, int y, double edgeChance) {
+        TAGraph graph = new TAGraphImpl();
+        for (int i = 0; i< x*y; i++) graph.addVertex(i);
+        // horizontal
+        for (int i = 0; i< x-1; i++) {
+            for (int j = 0; j< y; j++) {
+                int a = i+j*x;
+                int b = a+1;
+                if (random.nextDouble() <= edgeChance) {
+                    graph.addEdge(a, b);
+                }
+            }
+        }
+        // vertical
+        for (int j = 0; j< y-1; j++) {
+            for (int i = 0; i< x; i++) {
+                int a = i+j*x;
+                int b = a+x;
+                if (random.nextDouble() <= edgeChance) {
+                    graph.addEdge(a, b);
+                }
+            }
+        }
+        return graph;
+    }
+
+    @Override
     public Set<TAVertex> getRandomVertexSubset(TAGraph graph, int size) {
         Set<TAVertex> res = new HashSet<>();
         List<TAVertex> vertices = new ArrayList<>(graph.getVertices());

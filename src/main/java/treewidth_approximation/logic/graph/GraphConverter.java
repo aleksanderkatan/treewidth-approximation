@@ -9,18 +9,26 @@ import java.util.List;
 import java.util.Set;
 
 public class GraphConverter {
-    public static Graph convert(TAGraph graph, List<Set<Integer>> highlighted) {
+    public static Graph convert(TAGraph graph, List<Set<Integer>> colors, List<Set<Integer>> shapes) {
         Table table = new Table();
-        table.addColumn("type", Integer.class);
+        table.addColumn("color", Integer.class);
+        table.addColumn("shape", Integer.class);
         Graph res = new Graph(table, false);
 
         List<TAVertex> originalVertices = new ArrayList<>(graph.getVertices());
         for (TAVertex originalVertex : originalVertices) {
             Node node = res.addNode();
-            node.set("type", 0);
-            for (int j = 0; j < highlighted.size(); j++) {
-                if (highlighted.get(j).contains(originalVertex.getId())) {
-                    node.set("type", j+1);
+            node.set("color", 0);
+            node.set("shape", 0);
+            for (int j = 0; j < colors.size(); j++) {
+                if (colors.get(j).contains(originalVertex.getId())) {
+                    node.set("color", j+1);
+                    break;
+                }
+            }
+            for (int j = 0; j < shapes.size(); j++) {
+                if (shapes.get(j).contains(originalVertex.getId())) {
+                    node.set("shape", j+1);
                     break;
                 }
             }

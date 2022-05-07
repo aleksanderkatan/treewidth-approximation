@@ -1,28 +1,12 @@
 package treewidth_approximation;
 
-import prefuse.*;
-import prefuse.action.ActionList;
-import prefuse.action.RepaintAction;
-import prefuse.action.assignment.ColorAction;
-import prefuse.action.assignment.DataColorAction;
-import prefuse.action.layout.graph.ForceDirectedLayout;
-import prefuse.activity.Activity;
-import prefuse.controls.DragControl;
-import prefuse.controls.PanControl;
-import prefuse.controls.ZoomControl;
-import prefuse.data.Graph;
-import prefuse.render.DefaultRendererFactory;
-import prefuse.render.ShapeRenderer;
-import prefuse.util.ColorLib;
-import prefuse.visual.VisualItem;
-import treewidth_approximation.logic.graph.GraphConverter;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.random_graph_provider.RandomGraphProvider;
 import treewidth_approximation.logic.random_graph_provider.RandomGraphProviderImpl;
+import treewidth_approximation.logic.separator_finder.SeparatorFinder;
 import treewidth_approximation.view.GraphShower;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -32,10 +16,27 @@ public class Program {
     public static void main(String[] args) {
         RandomGraphProvider provider = new RandomGraphProviderImpl(new Random(0));
 
-        TAGraph g = provider.getRandom(15, 3.0/15);
-        Set<Integer> W = provider.getRandomVertexSubset(g, 4).stream().map(TAVertex::getId).collect(Collectors.toSet());
+        int x = 4;
+        int y = 50;
+        int WSize = 15;
+        int separatorSize = ((WSize+2)/3);
 
-        GraphShower.showGraph(g, List.of(W), "graph");
+        TAGraph g = provider.getGridSubgraph(x, y, 0.8);
+        Set<Integer> W = provider.getRandomVertexSubset(g, WSize).stream().map(TAVertex::getId).collect(Collectors.toSet());
+
+        GraphShower.showGraph(g, List.of(W), null, "Graph and W");
+
+        System.out.println("Attempting to find a separator of size " + separatorSize);
+        Set<Integer> separator = null;
+        try {
+            separator = SeparatorFinder.findSeparatorIds(g, W, separatorSize);
+        } catch (SeparatorFinder.NoSeparatorExistsException e) {
+            System.out.println("No separator of order " + separatorSize);
+        }
+        if (separator != null) {
+            System.out.println("Found separator of order " + separator.size());
+            GraphShower.showGraph(g, List.of(W), List.of(separator), "Separator");
+        }
     }
 
 
