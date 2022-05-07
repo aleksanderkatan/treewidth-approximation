@@ -17,14 +17,16 @@ public class Program {
         RandomGraphProvider provider = new RandomGraphProviderImpl(new Random(0));
 
         int x = 4;
-        int y = 50;
+        int y = 10;
         int WSize = 15;
         int separatorSize = ((WSize+2)/3);
 
-        TAGraph g = provider.getGridSubgraph(x, y, 0.8);
+        TAGraph g = provider.getGridSubgraph(x, y, 0.6).splitIntoConnectedComponents().get(0);
+        g.normalizeIds();
         Set<Integer> W = provider.getRandomVertexSubset(g, WSize).stream().map(TAVertex::getId).collect(Collectors.toSet());
 
-        GraphShower.showGraph(g, List.of(W), null, "Graph and W");
+        GraphShower.showGraphWithShapes(g, List.of(W), null, "Graph and W");
+//        GraphShower.showGraphWithIds(g, List.of(W), "Ids");
 
         System.out.println("Attempting to find a separator of size " + separatorSize);
         Set<Integer> separator = null;
@@ -35,7 +37,7 @@ public class Program {
         }
         if (separator != null) {
             System.out.println("Found separator of order " + separator.size());
-            GraphShower.showGraph(g, List.of(W), List.of(separator), "Separator");
+            GraphShower.showGraphWithShapes(g, List.of(W), List.of(separator), "Separator");
         }
     }
 

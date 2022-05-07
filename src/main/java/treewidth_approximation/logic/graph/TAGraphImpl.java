@@ -96,4 +96,54 @@ public class TAGraphImpl implements TAGraph {
 
         return result;
     }
+
+    @Override
+    public List<TAGraph> splitIntoConnectedComponents() {
+        Map<Integer, Integer> vertexComponents = new HashMap<>(); // vertex -> component
+
+        int index = 0;
+        for (TAVertex v : getVertices()) {
+            if (vertexComponents.get(v.getId()) != null) continue;
+
+            Queue<Integer> q = new LinkedList<>();
+            q.add(v.getId());
+
+            while (! q.isEmpty()) {
+                int vertex = q.remove();
+                if (vertexComponents.containsKey(vertex)) continue;
+                vertexComponents.put(vertex, index);
+                for (TAVertex n : getVertexById(vertex).getNeighbours()) {
+                    q.add(n.getId());
+                }
+            }
+            index++;
+        }
+
+        List<TAGraph> components = new ArrayList<>();
+        for (int i = 0; i< index; i++) components.add(new TAGraphImpl());
+        for (var k : vertexComponents.entrySet()) {
+            components.get(k.getValue()).addVertex(k.getKey());
+        }
+        for (var k : vertexComponents.entrySet()) {
+            TAGraph g = components.get(k.getValue());
+            TAVertex v = getVertexById(k.getKey());
+            for (TAVertex n : v.getNeighbours()) {
+                g.addEdge(v.getId(), n.getId());
+            }
+        }
+
+        // make sure everything stays linear
+        List<List<TAGraph>> componentsBySize = new ArrayList<>();
+        for (int i = 0; i<= vertices.size(); i++) componentsBySize.add(new ArrayList<>());
+        for (TAGraph g : components) {
+            componentsBySize.get(g.getVertices().size()).add(g);
+        }
+
+        List<TAGraph> orderedComponents = new ArrayList<>();
+        for (int i = vertices.size(); i>=0; i--) {
+            orderedComponents.addAll(componentsBySize.get(i));
+        }
+
+        return orderedComponents;
+    }
 }

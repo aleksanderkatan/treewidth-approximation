@@ -13,6 +13,7 @@ public class GraphConverter {
         Table table = new Table();
         table.addColumn("color", Integer.class);
         table.addColumn("shape", Integer.class);
+        table.addColumn("label", String.class);
         Graph res = new Graph(table, false);
 
         List<TAVertex> originalVertices = new ArrayList<>(graph.getVertices());
@@ -32,6 +33,7 @@ public class GraphConverter {
                     break;
                 }
             }
+            node.set("label", Integer.toString(originalVertex.getId()));
         }
 
         for (TAVertex v : originalVertices) {

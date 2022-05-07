@@ -1,6 +1,7 @@
 package treewidth_approximation.logic.graph;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public interface TAGraph {
@@ -19,4 +20,5 @@ public interface TAGraph {
     void removeEdge(int firstId, int secondId);
 
     TAGraph copyRestricting(Set<Integer> restricted);
+    List<TAGraph> splitIntoConnectedComponents();
 }
