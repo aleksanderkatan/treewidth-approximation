@@ -1,6 +1,7 @@
 package treewidth_approximation.logic.graph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TAGraphImpl implements TAGraph {
     // undirected graph without multi-edges or loops
@@ -11,8 +12,13 @@ public class TAGraphImpl implements TAGraph {
     }
 
     @Override
-    public Collection<TAVertex> getVertices() {
-        return vertices.values();
+    public Set<TAVertex> getVertices() {
+        return new HashSet<>(vertices.values());
+    }
+
+    @Override
+    public Set<Integer> getVerticesIds() {
+        return getVertices().stream().map(TAVertex::getId).collect(Collectors.toSet());
     }
 
     @Override
@@ -55,6 +61,8 @@ public class TAGraphImpl implements TAGraph {
     @Override
     public void addEdge(TAVertex first, TAVertex second) {
         if (first == second) return;
+        if (first == null || second == null) return;
+        if (vertices.get(first.getId()) == null || vertices.get(second.getId()) == null) return;
         if (first.getNeighbours().contains(second)) return;
         first.addNeighbour(second);
         second.addNeighbour(first);
@@ -94,6 +102,21 @@ public class TAGraphImpl implements TAGraph {
             }
         }
 
+        return result;
+    }
+
+    @Override
+    public TAGraph subgraphInducedBy(Set<Integer> vertices) {
+        TAGraph result = new TAGraphImpl();
+
+        for (Integer v : vertices) {
+            result.addVertex(v);
+        }
+        for (Integer v : vertices) {
+            for (Integer n : getVertexById(v).getNeighboursIds()) {
+                result.addEdge(v, n);
+            }
+        }
         return result;
     }
 

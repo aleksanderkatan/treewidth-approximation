@@ -38,22 +38,6 @@ public class SeparatorFinder {
                         }
                     }
 
-//                    StringBuilder s = new StringBuilder();
-//                    s.append("Currently checking: A = { ");
-//                    for (Integer integer : A) {
-//                        s.append(integer).append(" ");
-//                    }
-//                    s.append("}, B = { ");
-//                    for (Integer integer : B) {
-//                        s.append(integer).append(" ");
-//                    }
-//                    s.append("}, C = { ");
-//                    for (Integer integer : C) {
-//                        s.append(integer).append(" ");
-//                    }
-//                    s.append("}");
-//                    System.out.println(s);
-
                     Set<Integer> ASet = new HashSet<>(A);
                     Set<Integer> BSet = new HashSet<>(B);
                     Set<Integer> CSet = new HashSet<>(C);
@@ -63,8 +47,6 @@ public class SeparatorFinder {
                     int maxSeparatorSize = order - C.size();
                     int maxFlow = network.increaseCurrentFlow(maxSeparatorSize + 1);
                     if (maxFlow > maxSeparatorSize) return null;
-//                    System.out.println("Check successful");
-//                    System.out.println("Max flow: " + maxFlow);
                     List<Integer> result = new ArrayList<>(network.getSeparatorIds());
                     result.addAll(C);
 

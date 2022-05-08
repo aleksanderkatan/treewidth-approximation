@@ -1,8 +1,10 @@
-package treewidth_approximation.logic.graph;
+package treewidth_approximation.logic.prefuse;
 
 import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Table;
+import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.graph.TAVertex;
 
 import java.util.ArrayList;
 import java.util.List;

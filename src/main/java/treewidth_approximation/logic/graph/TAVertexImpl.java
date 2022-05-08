@@ -2,6 +2,7 @@ package treewidth_approximation.logic.graph;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TAVertexImpl implements TAVertex {
     private final Set<TAVertex> neighbours;
@@ -25,6 +26,11 @@ public class TAVertexImpl implements TAVertex {
     @Override
     public Set<TAVertex> getNeighbours() {
         return neighbours;
+    }
+
+    @Override
+    public Set<Integer> getNeighboursIds() {
+        return getNeighbours().stream().map(TAVertex::getId).collect(Collectors.toSet());
     }
 
     @Override

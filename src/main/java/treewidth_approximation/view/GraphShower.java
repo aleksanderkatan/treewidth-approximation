@@ -17,11 +17,12 @@ import prefuse.data.Graph;
 import prefuse.render.DefaultRendererFactory;
 import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
-import prefuse.render.ShapeRenderer;
 import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
-import treewidth_approximation.logic.graph.GraphConverter;
+import treewidth_approximation.logic.prefuse.GraphConverter;
 import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.prefuse.TreeDecompositionConverter;
+import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -29,35 +30,36 @@ import java.util.List;
 import java.util.Set;
 
 public class GraphShower {
+    public static void showTreeDecomposition(TreeDecomposition decomposition, String title) {
+        Graph graph = TreeDecompositionConverter.convert(decomposition);
+        int[] palette = getPalette(1);
+        int[] shapes = getShapes(1);
+
+        showGraph(graph, palette, shapes, true, title);
+    }
+
     public static void showGraphWithIds(TAGraph g, List<Set<Integer>> nodeColors, String title) {
-        showGraph(g, nodeColors, null, title);
+        Graph graph = GraphConverter.convert(g, nodeColors, new ArrayList<>());
+        int[] palette = getPalette(nodeColors.size()+1);
+        int[] shapes = getShapes(1);
+
+        showGraph(graph, palette, shapes, true, title);
     }
 
     public static void showGraphWithShapes(TAGraph g, List<Set<Integer>> nodeColors, List<Set<Integer>> nodeShapes, String title) {
-        if (nodeShapes == null) nodeShapes = new ArrayList<>();
-        showGraph(g, nodeColors, nodeShapes, title);
-    }
-
-    private static void showGraph(TAGraph g, List<Set<Integer>> nodeColors, List<Set<Integer>> nodeShapes, String title) {
-        if (nodeColors == null) nodeColors = new ArrayList<>();
-        // no nodeShapes => write labels instead
-        final boolean writeLabels = nodeShapes == null;
-        if (nodeShapes == null) {
-            nodeShapes = new ArrayList<>();
-        }
-
-        // -- 1. setup graph and palette ------------------------ ------------------------
         Graph graph = GraphConverter.convert(g, nodeColors, nodeShapes);
         int[] palette = getPalette(nodeColors.size()+1);
         int[] shapes = getShapes(nodeShapes.size()+1);
 
+        showGraph(graph, palette, shapes, false, title);
+    }
+
+    private static void showGraph(Graph graph, int[] palette, int[] shapes, boolean writeLabels, String title) {
         SwingUtilities.invokeLater(() -> {
-            // -- 2. the visualization --------------------------------------------
             Visualization vis = new Visualization();
             vis.add("graph", graph);
             vis.setInteractive("graph.edges", null, false);
 
-            // -- 3. the renderers and renderer factory ---------------------------
             DefaultRendererFactory rendererFactory = new DefaultRendererFactory();
             EdgeRenderer edgeRenderer = new EdgeRenderer(Constants.EDGE_TYPE_LINE, Constants.EDGE_ARROW_NONE);
             rendererFactory.setDefaultEdgeRenderer(edgeRenderer);
@@ -70,7 +72,6 @@ public class GraphShower {
 
             vis.setRendererFactory(rendererFactory);
 
-            // -- 4. the processing actions ---------------------------------------
             ActionList colors = new ActionList();
 
             DataColorAction fill = new DataColorAction("graph.nodes", "color",
@@ -97,18 +98,16 @@ public class GraphShower {
             vis.putAction("colors", colors);
             vis.putAction("layout", layout);
 
-            // -- 5. the display and interactive controls -------------------------
             Display display = new Display(vis);
             display.addControlListener(new DragControl());
             display.addControlListener(new PanControl());
             display.addControlListener(new ZoomControl());
 
-            // -- 6. launch the visualization -------------------------------------
             JFrame frame = new JFrame(title);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.add(display);
-            frame.pack();           // layout components in window
-            frame.setVisible(true); // show the window
+            frame.pack();
+            frame.setVisible(true);
 
             vis.run("colors");
             vis.run("layout");

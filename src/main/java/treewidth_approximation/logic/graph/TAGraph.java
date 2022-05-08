@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 public interface TAGraph {
-    Collection<TAVertex> getVertices();
+    Set<TAVertex> getVertices();
+    Set<Integer> getVerticesIds();
 
     TAVertex getVertexById(int id);
     void normalizeIds();
@@ -20,5 +21,6 @@ public interface TAGraph {
     void removeEdge(int firstId, int secondId);
 
     TAGraph copyRestricting(Set<Integer> restricted);
+    TAGraph subgraphInducedBy(Set<Integer> vertices);
     List<TAGraph> splitIntoConnectedComponents();
 }
