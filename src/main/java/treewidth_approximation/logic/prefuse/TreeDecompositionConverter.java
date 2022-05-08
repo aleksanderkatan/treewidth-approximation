@@ -5,6 +5,7 @@ import prefuse.data.Node;
 import prefuse.data.Table;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
+import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 
@@ -29,13 +30,7 @@ public class TreeDecompositionConverter {
         Node node = graph.addNode();
         node.set("color", 0);
         node.set("shape", 0);
-
-        StringBuilder s = new StringBuilder();
-        for (Integer id : decompositionNode.getVertices()) {
-            s.append(id).append(", ");
-        }
-        s.delete(s.length()-3, s.length()-1);
-        node.set("label", new String(s));
+        node.set("label", StringUtilities.getNodeLabel(decompositionNode));
 
         for (DecompositionNode childNode : decompositionNode.getChildren()) {
             Node child = generateGraph(graph, childNode);

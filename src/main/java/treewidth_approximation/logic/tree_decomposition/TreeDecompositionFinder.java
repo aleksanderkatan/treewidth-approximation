@@ -36,9 +36,6 @@ public class TreeDecompositionFinder {
     }
 
     private Result find(TAGraph graph, Set<Integer> W, int maxSeparatorSize, int maxBagSize) {
-        System.out.println();
-        System.out.println(graph.getVertices().size());
-        System.out.println(W.size());
         Result result = new Result();
         result.successful = false;
         result.decomposition = null;
@@ -75,6 +72,15 @@ public class TreeDecompositionFinder {
             Set<Integer> newW = new HashSet<>(newVertices);
             newW.retainAll(W);
             newW.addAll(separator);
+
+            // !!!
+            //increase W so it has maxSeparatorSize*3
+            List<Integer> extraVertices = new ArrayList<>(newVertices);
+            extraVertices.removeAll(newW);
+            Collections.shuffle(extraVertices);
+            extraVertices = extraVertices.subList(0, min(extraVertices.size(), 3*maxSeparatorSize-newW.size()));
+            newW.addAll(extraVertices);
+            // !!!
 
             Result r = find(newGraph, newW, maxSeparatorSize, maxBagSize);
             if (! r.successful) {
