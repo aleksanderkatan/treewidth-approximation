@@ -19,8 +19,8 @@ import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
-import treewidth_approximation.logic.prefuse.GraphConverter;
 import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.prefuse.GraphConverter;
 import treewidth_approximation.logic.prefuse.TreeDecompositionConverter;
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 
@@ -62,6 +62,7 @@ public class GraphShower {
 
             DefaultRendererFactory rendererFactory = new DefaultRendererFactory();
             EdgeRenderer edgeRenderer = new EdgeRenderer(Constants.EDGE_TYPE_LINE, Constants.EDGE_ARROW_NONE);
+            edgeRenderer.setDefaultLineWidth(4);
             rendererFactory.setDefaultEdgeRenderer(edgeRenderer);
 
             if (writeLabels) {

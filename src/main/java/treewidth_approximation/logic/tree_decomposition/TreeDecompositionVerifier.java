@@ -1,12 +1,9 @@
 package treewidth_approximation.logic.tree_decomposition;
 
 import org.javatuples.Pair;
-import prefuse.data.Graph;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.misc.StringUtilities;
-import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
-import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 
 import java.util.HashMap;
 import java.util.HashSet;

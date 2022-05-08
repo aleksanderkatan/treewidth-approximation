@@ -1,16 +1,13 @@
 package treewidth_approximation.logic.tree_decomposition;
 
 import treewidth_approximation.logic.graph.TAGraph;
-import treewidth_approximation.logic.graph.TAGraphImpl;
-import treewidth_approximation.logic.graph.TAVertex;
-import treewidth_approximation.logic.random_graph_provider.RandomGraphProvider;
-import treewidth_approximation.logic.random_graph_provider.RandomGraphProviderImpl;
 import treewidth_approximation.logic.separator_finder.SeparatorFinder;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class TreeDecompositionFinder {
@@ -29,10 +26,20 @@ public class TreeDecompositionFinder {
     public Result findDecomposition(int actualTreeWidth) {
         int bagSize = actualTreeWidth + 1;
         int maxBagSize = 4*bagSize;
-        RandomGraphProvider provider = new RandomGraphProviderImpl(new Random(0));
-        Set<Integer> W = provider.getRandomVertexSubset(originalGraph, min(bagSize * 3, originalGraph.getVertices().size()-1))
-                .stream().map(TAVertex::getId).collect(Collectors.toSet());
-        return find(originalGraph, W, bagSize, maxBagSize);
+        DecompositionNode root = new DecompositionNodeImpl(new HashSet<>());
+
+        for (TAGraph subgraph : originalGraph.splitIntoConnectedComponents()) {
+            List<Integer> vertices = new ArrayList<>(subgraph.getVerticesIds());
+            vertices = vertices.subList(0, min(3 * bagSize, vertices.size()));
+            Set<Integer> W = new HashSet<>(vertices);
+            Result r = find(subgraph, W, bagSize, maxBagSize);
+            if (!r.successful) return r;
+            root.addChild(r.decomposition.getRoot());
+        }
+        Result r = new Result();
+        r.successful = true;
+        r.decomposition = new TreeDecompositionImpl(root);
+        return r;
     }
 
     private Result find(TAGraph graph, Set<Integer> W, int maxSeparatorSize, int maxBagSize) {
@@ -77,7 +84,6 @@ public class TreeDecompositionFinder {
             //increase W so it has maxSeparatorSize*3
             List<Integer> extraVertices = new ArrayList<>(newVertices);
             extraVertices.removeAll(newW);
-            Collections.shuffle(extraVertices);
             extraVertices = extraVertices.subList(0, min(extraVertices.size(), 3*maxSeparatorSize-newW.size()));
             newW.addAll(extraVertices);
             // !!!
@@ -87,10 +93,21 @@ public class TreeDecompositionFinder {
                 r.decomposition = null;
                 return r;
             }
+
+//            boolean verify = TreeDecompositionVerifier.verify(r.decomposition, newGraph, 20, true);
+//            if (!verify) {
+//                GraphShower.showGraphWithIds(newGraph, new ArrayList<>(), "failed graph");
+//                GraphShower.showTreeDecomposition(r.decomposition, "failed decomposition");
+//                r.successful = false;
+//                return r;
+//            }
+
             decompositions.add(r.decomposition);
         }
-        // new decomposition is a new bag consisting of separator connected to roots of other decompositions
-        DecompositionNode node = new DecompositionNodeImpl(separator);
+        // new decomposition is a new bag consisting of (separator+W) connected to roots of other decompositions
+        Set<Integer> rootBag = new HashSet<>(separator);
+        rootBag.addAll(W);
+        DecompositionNode node = new DecompositionNodeImpl(rootBag);
         for (TreeDecomposition decomposition : decompositions) {
             node.addChild(decomposition.getRoot());
         }

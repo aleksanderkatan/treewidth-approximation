@@ -3,15 +3,9 @@ package treewidth_approximation.logic.prefuse;
 import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Table;
-import treewidth_approximation.logic.graph.TAGraph;
-import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class TreeDecompositionConverter {
     public static Graph convert(TreeDecomposition decomposition) {

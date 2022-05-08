@@ -8,11 +8,12 @@ import java.util.Set;
 
 public class StringUtilities {
     public static String setToString(Set<Integer> set) {
+        if (set.isEmpty()) return "EMPTY";
         StringBuilder s = new StringBuilder();
         for (Integer id : set) {
             s.append(id).append(", ");
         }
-        s.delete(s.length()-3, s.length()-1);
+        s.delete(s.length()-2, s.length()-1);
         return new String(s);
     }
 
