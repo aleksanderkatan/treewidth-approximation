@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class TreeDecompositionFinder {
@@ -23,16 +24,22 @@ public class TreeDecompositionFinder {
         this.originalGraph = g;
     }
 
+    private void extendSet(Set<Integer> setToExtend, Set<Integer> setExtendWith, int size) {
+        List<Integer> listExtendWith = new ArrayList<>(setExtendWith);
+        listExtendWith.removeAll(setToExtend);
+        listExtendWith = listExtendWith.subList(0, max(min(size - setToExtend.size(), listExtendWith.size()), 0));
+        setToExtend.addAll(listExtendWith);
+    }
+
     public Result findDecomposition(int actualTreeWidth) {
         int bagSize = actualTreeWidth + 1;
-        int maxBagSize = 4*bagSize;
+        int minWSize = bagSize + 2;
         DecompositionNode root = new DecompositionNodeImpl(new HashSet<>());
 
         for (TAGraph subgraph : originalGraph.splitIntoConnectedComponents()) {
-            List<Integer> vertices = new ArrayList<>(subgraph.getVerticesIds());
-            vertices = vertices.subList(0, min(3 * bagSize, vertices.size()));
-            Set<Integer> W = new HashSet<>(vertices);
-            Result r = find(subgraph, W, bagSize, maxBagSize);
+            Set<Integer> W = new HashSet<>();
+            extendSet(W, subgraph.getVerticesIds(), 3*bagSize);
+            Result r = find(subgraph, W, bagSize, minWSize, 4*bagSize);
             if (!r.successful) return r;
             root.addChild(r.decomposition.getRoot());
         }
@@ -42,7 +49,7 @@ public class TreeDecompositionFinder {
         return r;
     }
 
-    private Result find(TAGraph graph, Set<Integer> W, int maxSeparatorSize, int maxBagSize) {
+    private Result find(TAGraph graph, Set<Integer> W, int maxSeparatorSize, int minWSize, int maxBagSize) {
         Result result = new Result();
         result.successful = false;
         result.decomposition = null;
@@ -81,14 +88,11 @@ public class TreeDecompositionFinder {
             newW.addAll(separator);
 
             // !!!
-            //increase W so it has maxSeparatorSize*3
-            List<Integer> extraVertices = new ArrayList<>(newVertices);
-            extraVertices.removeAll(newW);
-            extraVertices = extraVertices.subList(0, min(extraVertices.size(), 3*maxSeparatorSize-newW.size()));
-            newW.addAll(extraVertices);
+            //increase W so it has right size
+            extendSet(W, newVertices, minWSize);
             // !!!
 
-            Result r = find(newGraph, newW, maxSeparatorSize, maxBagSize);
+            Result r = find(newGraph, newW, maxSeparatorSize, minWSize, maxBagSize);
             if (! r.successful) {
                 r.decomposition = null;
                 return r;

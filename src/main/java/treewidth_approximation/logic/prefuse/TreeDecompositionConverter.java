@@ -24,7 +24,7 @@ public class TreeDecompositionConverter {
         Node node = graph.addNode();
         node.set("color", 0);
         node.set("shape", 0);
-        node.set("label", StringUtilities.getNodeLabel(decompositionNode));
+        node.set("label", decompositionNode.getLabel());
 
         for (DecompositionNode childNode : decompositionNode.getChildren()) {
             Node child = generateGraph(graph, childNode);

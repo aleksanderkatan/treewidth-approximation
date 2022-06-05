@@ -1,5 +1,7 @@
 package treewidth_approximation.logic.tree_decomposition;
 
+import treewidth_approximation.logic.misc.StringUtilities;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +17,11 @@ public class DecompositionNodeImpl implements DecompositionNode {
     @Override
     public Set<Integer> getVertices() {
         return vertices;
+    }
+
+    @Override
+    public String getLabel() {
+        return StringUtilities.getNodeLabel(this);
     }
 
     @Override

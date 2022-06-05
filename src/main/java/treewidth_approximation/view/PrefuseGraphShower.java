@@ -1,5 +1,6 @@
 package treewidth_approximation.view;
 
+import org.javatuples.Pair;
 import prefuse.Constants;
 import prefuse.Display;
 import prefuse.Visualization;
@@ -8,6 +9,7 @@ import prefuse.action.RepaintAction;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.DataColorAction;
 import prefuse.action.assignment.DataShapeAction;
+import prefuse.action.layout.Layout;
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.activity.Activity;
 import prefuse.controls.DragControl;
@@ -18,18 +20,32 @@ import prefuse.render.DefaultRendererFactory;
 import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
+import prefuse.visual.DecoratorItem;
 import prefuse.visual.VisualItem;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.prefuse.GraphConverter;
+import treewidth_approximation.logic.prefuse.SteinerInstanceConverter;
 import treewidth_approximation.logic.prefuse.TreeDecompositionConverter;
+import treewidth_approximation.logic.steiner.SteinerInstance;
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 
 import javax.swing.*;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
-public class GraphShower {
+public class PrefuseGraphShower {
+    public static void showSteinerInstance(SteinerInstance instance, List<Pair<Integer, Integer>> highlightedEdges, String title) {
+        Graph graph = SteinerInstanceConverter.convert(instance, highlightedEdges);
+        int[] palette = getPalette(1);
+        int[] shapes = getShapes(1);
+
+        showGraph(graph, palette, shapes, true, title);
+    }
+
     public static void showTreeDecomposition(TreeDecomposition decomposition, String title) {
         Graph graph = TreeDecompositionConverter.convert(decomposition);
         int[] palette = getPalette(1);
@@ -54,7 +70,8 @@ public class GraphShower {
         showGraph(graph, palette, shapes, false, title);
     }
 
-    private static void showGraph(Graph graph, int[] palette, int[] shapes, boolean writeLabels, String title) {
+
+    private static void showGraph(Graph graph, int[] palette, int[] shapes, boolean writeNodeLabels, String title) {
         SwingUtilities.invokeLater(() -> {
             Visualization vis = new Visualization();
             vis.add("graph", graph);
@@ -65,7 +82,7 @@ public class GraphShower {
             edgeRenderer.setDefaultLineWidth(4);
             rendererFactory.setDefaultEdgeRenderer(edgeRenderer);
 
-            if (writeLabels) {
+            if (writeNodeLabels) {
                 LabelRenderer labelRenderer = new LabelRenderer("label");
                 labelRenderer.setRoundedCorner(8, 8);
                 rendererFactory.setDefaultRenderer(labelRenderer);
@@ -77,13 +94,18 @@ public class GraphShower {
 
             DataColorAction fill = new DataColorAction("graph.nodes", "color",
                     Constants.NOMINAL, VisualItem.FILLCOLOR, palette);
+
+            DataColorAction edgeFill = new DataColorAction("graph.edges", "color",
+                    Constants.NOMINAL, VisualItem.STROKECOLOR, getPalette(2));
+
+//            ColorAction edges = new ColorAction("graph.edges",
+//                    VisualItem.STROKECOLOR, ColorLib.gray(200));
+
             colors.add(fill);
+            colors.add(edgeFill);
+//            colors.add(edges);
 
-            ColorAction edges = new ColorAction("graph.edges",
-                    VisualItem.STROKECOLOR, ColorLib.gray(200));
-            colors.add(edges);
-
-            if (writeLabels) {
+            if (writeNodeLabels) {
                 ColorAction text = new ColorAction("graph.nodes",
                         VisualItem.TEXTCOLOR, ColorLib.gray(200));
                 colors.add(text);
@@ -114,6 +136,22 @@ public class GraphShower {
             vis.run("layout");
         });
     }
+
+//    private static class LabelLayout extends Layout {
+//        public LabelLayout(String group) {
+//            super(group);
+//        }
+//        public void run(double frac) {
+//            var iter = m_vis.items(m_group);
+//            while ( iter.hasNext() ) {
+//                DecoratorItem item = (DecoratorItem)iter.next();
+//                VisualItem node = item.getDecoratedItem();
+//                Rectangle2D bounds = node.getBounds();
+//                setX(item, null, bounds.getCenterX());
+//                setY(item, null, bounds.getCenterY());
+//            }
+//        }
+//    }
 
     private static int[] getPalette(int size) {
         int[] basePalette = new int[] {

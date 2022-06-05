@@ -1,44 +1,31 @@
 package treewidth_approximation;
 
 import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.random_graph_provider.RandomGraphProvider;
 import treewidth_approximation.logic.random_graph_provider.RandomGraphProviderImpl;
-import treewidth_approximation.logic.tree_decomposition.TreeDecompositionFinder;
-import treewidth_approximation.logic.tree_decomposition.TreeDecompositionVerifier;
-import treewidth_approximation.view.GraphShower;
+import treewidth_approximation.logic.steiner.SteinerInstance;
+import treewidth_approximation.view.JungGraphShower;
+import treewidth_approximation.view.PrefuseGraphShower;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Program {
     public static void main(String[] args) {
         RandomGraphProvider provider = new RandomGraphProviderImpl(new Random(0));
 
-//        int bagSize = 3+1;
-        int bagSize = 2+1;
-//        int bagSize = 1+1;
-        int vertices = 200;
+        int vertices = 100;
+        double edgeChance = 1.75/vertices;
 
-//        TAGraph g = provider.getRandom(vertices, 1.75/vertices).splitIntoConnectedComponents().get(0);
-        TAGraph g = provider.getRandom(vertices, 1.75/vertices);
+        TAGraph g = provider.getRandom(vertices, edgeChance).splitIntoConnectedComponents().get(0);
         g.normalizeIds();
 
-        GraphShower.showGraphWithIds(g, new ArrayList<>(), "Graph");
+        Set<Integer> terminals = provider.getRandomVertexSubset(g, 10).stream()
+                .map(TAVertex::getId).collect(Collectors.toSet());
+        SteinerInstance instance = new SteinerInstance(g, terminals, new HashMap<>());
 
-        TreeDecompositionFinder finder = new TreeDecompositionFinder(g);
-        TreeDecompositionFinder.Result result = finder.findDecomposition(bagSize - 1);
-
-        if (result.successful) {
-            GraphShower.showTreeDecomposition(result.decomposition, "Tree decomposition");
-            TreeDecompositionVerifier.verify(result.decomposition, g, bagSize * 4, true);
-        } else {
-            System.out.println("Found inseparable set");
-            GraphShower.showGraphWithIds(g, List.of(result.setWithoutSeparator), "Set without balanced " + bagSize + " separator");
-            for (Integer v : result.setWithoutSeparator) {
-                System.out.print(v.toString() + " ");
-            }
-            System.out.println();
-        }
+        PrefuseGraphShower.showSteinerInstance(instance, new ArrayList<>(), "Steiner instance");
+//        JungGraphShower.showGraphWithIds(g, "graph");
     }
 }
