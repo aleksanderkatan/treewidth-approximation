@@ -1,5 +1,6 @@
 package treewidth_approximation.logic.prefuse;
 
+import org.javatuples.Pair;
 import prefuse.data.Edge;
 import prefuse.data.Graph;
 import prefuse.data.Node;
@@ -12,22 +13,10 @@ import java.util.List;
 import java.util.Set;
 
 public class GraphConverter {
-    public static Graph convert(TAGraph graph, List<Set<Integer>> colors, List<Set<Integer>> shapes) {
-        Table nodeTable = new Table();
-
-//        nodeTable.addColumn(Graph.DEFAULT_NODE_KEY, int.class );
-        nodeTable.addColumn("color", Integer.class);
-        nodeTable.addColumn("shape", Integer.class);
-        nodeTable.addColumn("label", String.class);
-
-        Table edgeTable = new Table();
-
-        edgeTable.addColumn(Graph.DEFAULT_SOURCE_KEY, int.class);
-        edgeTable.addColumn(Graph.DEFAULT_TARGET_KEY, int.class);
-        edgeTable.addColumn("color", Integer.class);
-        edgeTable.addColumn("edge_label", int.class);
-
-        Graph res = new Graph(nodeTable, edgeTable,false);
+    public static Graph convert(TAGraph graph,
+                                Set<Integer> coloredVertices, Set<Integer> crossedVertices,
+                                Set<Pair<Integer, Integer>> highlightedEdges) {
+        Graph res = getGraphBase();
 
         Node[] nodes = new Node[graph.getVertices().size()];
 
@@ -35,22 +24,10 @@ public class GraphConverter {
         for (TAVertex originalVertex : originalVertices) {
             Node node = res.addNode();
             nodes[originalVertex.getId()] = node;
-            node.set("color", 0);
-            node.set("shape", 0);
-//            node.set(Graph.DEFAULT_NODE_KEY, originalVertex.getId());
-            for (int j = 0; j < colors.size(); j++) {
-                if (colors.get(j).contains(originalVertex.getId())) {
-                    node.set("color", j+1);
-                    break;
-                }
-            }
-            for (int j = 0; j < shapes.size(); j++) {
-                if (shapes.get(j).contains(originalVertex.getId())) {
-                    node.set("shape", j+1);
-                    break;
-                }
-            }
-            node.set("label", Integer.toString(originalVertex.getId()));
+            // inverted since palettes are weird
+            node.set("node_colored", coloredVertices.contains(originalVertex.getId()) ? 0 : 1);
+            node.set("node_crossed", crossedVertices.contains(originalVertex.getId()) ? 0 : 1);
+            node.set("node_label", Integer.toString(originalVertex.getId()));
         }
 
         for (TAVertex v : originalVertices) {
@@ -60,13 +37,30 @@ public class GraphConverter {
                 if (id1 < id2) {
                     res.addEdge(id1, id2);
                     Edge e = res.getEdge(nodes[id1], nodes[id2]);
-                    e.set("edge_label", 2);
-                    e.set("color", (id1^id2)%2);
+                    // inverted since palettes are weird
+                    e.set("edge_highlighted", highlightedEdges.contains(new Pair<>(id1, id2)) ? 0 : 1);
                     e.set(Graph.DEFAULT_SOURCE_KEY, id1);
                     e.set(Graph.DEFAULT_TARGET_KEY, id2);
                 }
             }
         }
         return res;
+    }
+
+    public static Graph getGraphBase() {
+        Table nodeTable = new Table();
+
+//        nodeTable.addColumn(Graph.DEFAULT_NODE_KEY, int.class );
+        nodeTable.addColumn("node_colored", Integer.class);
+        nodeTable.addColumn("node_crossed", Integer.class);
+        nodeTable.addColumn("node_label", String.class);
+
+        Table edgeTable = new Table();
+
+        edgeTable.addColumn(Graph.DEFAULT_SOURCE_KEY, int.class);
+        edgeTable.addColumn(Graph.DEFAULT_TARGET_KEY, int.class);
+        edgeTable.addColumn("edge_highlighted", Integer.class);
+
+        return new Graph(nodeTable, edgeTable,false);
     }
 }

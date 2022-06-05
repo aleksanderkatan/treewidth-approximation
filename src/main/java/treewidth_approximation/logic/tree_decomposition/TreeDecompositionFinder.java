@@ -98,14 +98,6 @@ public class TreeDecompositionFinder {
                 return r;
             }
 
-//            boolean verify = TreeDecompositionVerifier.verify(r.decomposition, newGraph, 20, true);
-//            if (!verify) {
-//                GraphShower.showGraphWithIds(newGraph, new ArrayList<>(), "failed graph");
-//                GraphShower.showTreeDecomposition(r.decomposition, "failed decomposition");
-//                r.successful = false;
-//                return r;
-//            }
-
             decompositions.add(r.decomposition);
         }
         // new decomposition is a new bag consisting of (separator+W) connected to roots of other decompositions
