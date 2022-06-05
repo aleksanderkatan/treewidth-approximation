@@ -18,20 +18,7 @@ public class TreeDecompositionFinder {
         public Set<Integer> setWithoutSeparator;
     }
 
-    private final TAGraph originalGraph;
-
-    public TreeDecompositionFinder(TAGraph g) {
-        this.originalGraph = g;
-    }
-
-    private void extendSet(Set<Integer> setToExtend, Set<Integer> setExtendWith, int size) {
-        List<Integer> listExtendWith = new ArrayList<>(setExtendWith);
-        listExtendWith.removeAll(setToExtend);
-        listExtendWith = listExtendWith.subList(0, max(min(size - setToExtend.size(), listExtendWith.size()), 0));
-        setToExtend.addAll(listExtendWith);
-    }
-
-    public Result findDecomposition(int actualTreeWidth) {
+    public static Result findDecomposition(TAGraph originalGraph, int actualTreeWidth) {
         int bagSize = actualTreeWidth + 1;
         int minWSize = bagSize + 2;
         DecompositionNode root = new DecompositionNodeImpl(new HashSet<>());
@@ -49,7 +36,7 @@ public class TreeDecompositionFinder {
         return r;
     }
 
-    private Result find(TAGraph graph, Set<Integer> W, int maxSeparatorSize, int minWSize, int maxBagSize) {
+    private static Result find(TAGraph graph, Set<Integer> W, int maxSeparatorSize, int minWSize, int maxBagSize) {
         Result result = new Result();
         result.successful = false;
         result.decomposition = null;
@@ -112,4 +99,10 @@ public class TreeDecompositionFinder {
         return result;
     }
 
+    private static void extendSet(Set<Integer> setToExtend, Set<Integer> setExtendWith, int size) {
+        List<Integer> listExtendWith = new ArrayList<>(setExtendWith);
+        listExtendWith.removeAll(setToExtend);
+        listExtendWith = listExtendWith.subList(0, max(min(size - setToExtend.size(), listExtendWith.size()), 0));
+        setToExtend.addAll(listExtendWith);
+    }
 }

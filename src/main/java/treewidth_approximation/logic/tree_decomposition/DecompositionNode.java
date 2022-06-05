@@ -8,4 +8,5 @@ public interface DecompositionNode {
 
     Set<DecompositionNode> getChildren();
     void addChild(DecompositionNode child);
+    void removeChild(DecompositionNode child);
 }

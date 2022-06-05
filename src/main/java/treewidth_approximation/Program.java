@@ -46,8 +46,7 @@ public class Program {
         Set<Integer> separator = SeparatorFinder.findSeparatorIds(g, terminals, 10);
         PrefuseGraphShower.showGraphWithShapes(g, terminals, separator, "Separator");
 
-        TreeDecompositionFinder finder = new TreeDecompositionFinder(g);
-        TreeDecompositionFinder.Result result = finder.findDecomposition(5);
+        TreeDecompositionFinder.Result result = TreeDecompositionFinder.findDecomposition(g, 5);
         if (result.successful) {
             PrefuseGraphShower.showTreeDecomposition(result.decomposition, "Tree decomposition");
         }

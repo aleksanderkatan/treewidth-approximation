@@ -33,4 +33,9 @@ public class DecompositionNodeImpl implements DecompositionNode {
     public void addChild(DecompositionNode child) {
         children.add(child);
     }
+
+    @Override
+    public void removeChild(DecompositionNode child) {
+        children.remove(child);
+    }
 }
