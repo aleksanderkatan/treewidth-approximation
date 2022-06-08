@@ -21,5 +21,5 @@ public interface TAGraph {
 
     TAGraph copyRestricting(Set<Integer> restricted);
     TAGraph subgraphInducedBy(Set<Integer> vertices);
-    List<TAGraph> splitIntoConnectedComponents();
+    List<TAGraph> splitIntoConnectedComponents(boolean normalizeIds);
 }

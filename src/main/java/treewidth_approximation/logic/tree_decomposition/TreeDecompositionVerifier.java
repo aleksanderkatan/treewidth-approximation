@@ -30,16 +30,6 @@ public class TreeDecompositionVerifier {
                 edges.add(new Pair<>(min(v.getId(), n.getId()), max(v.getId(), n.getId())));
             }
         }
-        verifyEdges(decomposition.getRoot(), edges);
-        if (! edges.isEmpty()) {
-            if (verbose) {
-                System.out.println("Not all edges were considered");
-                for (Pair<Integer, Integer> edge : edges) {
-                    System.out.println(edge.getValue0().toString() + " " + edge.getValue1().toString());
-                }
-            }
-            return false;
-        }
 
         for (Integer v : graph.getVerticesIds()) {
             VertexState result = verifyVertex(decomposition.getRoot(), v);
@@ -53,6 +43,17 @@ public class TreeDecompositionVerifier {
                 }
                 return false;
             }
+        }
+
+        verifyEdges(decomposition.getRoot(), edges);
+        if (! edges.isEmpty()) {
+            if (verbose) {
+                System.out.println("Not all edges were considered");
+                for (Pair<Integer, Integer> edge : edges) {
+                    System.out.println(edge.getValue0().toString() + " " + edge.getValue1().toString());
+                }
+            }
+            return false;
         }
 
         if (verbose) {

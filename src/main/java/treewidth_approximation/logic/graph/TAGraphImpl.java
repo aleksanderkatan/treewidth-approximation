@@ -121,7 +121,7 @@ public class TAGraphImpl implements TAGraph {
     }
 
     @Override
-    public List<TAGraph> splitIntoConnectedComponents() {
+    public List<TAGraph> splitIntoConnectedComponents(boolean normalizeIds) {
         Map<Integer, Integer> vertexComponents = new HashMap<>(); // vertex -> component
 
         int index = 0;
@@ -159,6 +159,9 @@ public class TAGraphImpl implements TAGraph {
         List<List<TAGraph>> componentsBySize = new ArrayList<>();
         for (int i = 0; i<= vertices.size(); i++) componentsBySize.add(new ArrayList<>());
         for (TAGraph g : components) {
+            if (normalizeIds) {
+                g.normalizeIds();
+            }
             componentsBySize.get(g.getVertices().size()).add(g);
         }
 

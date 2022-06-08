@@ -18,12 +18,17 @@ public class TreeDecompositionFinder {
         public Set<Integer> setWithoutSeparator;
     }
 
+    /**
+     *  either finds a tree decomposition of treewidth at most 4*actualTreeWidth+3,
+     *  or proves that tree-width is bigger than actualTreeWidth
+     *  by returning a set of size 3*(actualTreeWidth+1) that doesn't have a balanced separator of size actualTreeWidth+1
+     */
     public static Result findDecomposition(TAGraph originalGraph, int actualTreeWidth) {
-        int bagSize = actualTreeWidth + 1;
-        int minWSize = bagSize + 2;
+        int bagSize = actualTreeWidth+1;
+        int minWSize = bagSize*3; // could possibly be bagSize+1, but still may grow in sub-problems up to 3*bagSize
         DecompositionNode root = new DecompositionNodeImpl(new HashSet<>());
 
-        for (TAGraph subgraph : originalGraph.splitIntoConnectedComponents()) {
+        for (TAGraph subgraph : originalGraph.splitIntoConnectedComponents(false)) {
             Set<Integer> W = new HashSet<>();
             extendSet(W, subgraph.getVerticesIds(), 3*bagSize);
             Result r = find(subgraph, W, bagSize, minWSize, 4*bagSize);
@@ -60,7 +65,7 @@ public class TreeDecompositionFinder {
             result.setWithoutSeparator = new HashSet<>(W);
             return result;
         }
-        List<TAGraph> components = graph.copyRestricting(separator).splitIntoConnectedComponents();
+        List<TAGraph> components = graph.copyRestricting(separator).splitIntoConnectedComponents(false);
         List<TreeDecomposition> decompositions = new ArrayList<>();
 
         for (TAGraph component : components) {
@@ -75,8 +80,9 @@ public class TreeDecompositionFinder {
             newW.addAll(separator);
 
             // !!!
-            //increase W so it has right size
-            extendSet(W, newVertices, minWSize);
+            // increase newW so it has right size
+            // if there is not enough vertices, next step will return a single node
+            extendSet(newW, newVertices, minWSize);
             // !!!
 
             Result r = find(newGraph, newW, maxSeparatorSize, minWSize, maxBagSize);

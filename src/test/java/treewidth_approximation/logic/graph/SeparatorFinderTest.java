@@ -52,8 +52,6 @@ public class SeparatorFinderTest {
             throw new RuntimeException();
         }
 
-        ids.forEach(System.out::println);
-
         assertEquals(1, ids.size());
         assertTrue(ids.contains(20));
     }
