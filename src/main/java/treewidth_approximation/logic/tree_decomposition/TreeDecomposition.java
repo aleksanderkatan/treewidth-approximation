@@ -7,5 +7,5 @@ public interface TreeDecomposition {
      * Reduces amount of bags to be O(kn), where k is the bag size.
      * Does not necessarily return irreducible decomposition.
      */
-    void collapse();
+    TreeDecomposition copy();
 }

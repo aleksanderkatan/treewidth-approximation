@@ -47,7 +47,9 @@ public class PrefuseGraphShower {
     }
 
     public static void showGraphWithShapes(TAGraph g, Set<Integer> coloredNodes, Set<Integer> crossedNodes, String title) {
-        Graph graph = GraphConverter.convert(g, coloredNodes, crossedNodes, new HashSet<>());
+        Set<Integer> actualCrossedNodes = new HashSet<>(g.getVerticesIds());
+        actualCrossedNodes.removeAll(crossedNodes);
+        Graph graph = GraphConverter.convert(g, coloredNodes, actualCrossedNodes, new HashSet<>());
         showGraph(graph, false, title);
     }
 
@@ -55,7 +57,7 @@ public class PrefuseGraphShower {
     private static void showGraph(Graph graph, boolean writeNodeLabels, String title) {
         // special, default
         int[] baseShapes = new int[]
-                { Constants.SHAPE_CROSS, Constants.SHAPE_ELLIPSE };
+                { Constants.SHAPE_ELLIPSE, Constants.SHAPE_CROSS };
 
         // special, default
         int[] nodePalette = new int[]

@@ -47,7 +47,7 @@ public class TreeDecompositionFinder {
         result.decomposition = null;
         result.setWithoutSeparator = new HashSet<>();
 
-        // if graph is small enough pack it into a single bag
+        // if graph is small enough - pack it into a single bag
         if (graph.getVertices().size() <= maxBagSize) {
             Set<Integer> bag = graph.getVerticesIds();
             DecompositionNode node = new DecompositionNodeImpl(bag);
@@ -81,7 +81,7 @@ public class TreeDecompositionFinder {
 
             // !!!
             // increase newW so it has right size
-            // if there is not enough vertices, next step will return a single node
+            // if there is not enough vertices, next step will return a single node anyway
             extendSet(newW, newVertices, minWSize);
             // !!!
 

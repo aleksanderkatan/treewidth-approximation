@@ -17,10 +17,6 @@ public class StringUtilities {
         return new String(s);
     }
 
-    public static String getNodeLabel(DecompositionNode node) {
-        return setToString(node.getVertices());
-    }
-
     public static String graphToString(TAGraph g) {
         StringBuilder s = new StringBuilder();
 

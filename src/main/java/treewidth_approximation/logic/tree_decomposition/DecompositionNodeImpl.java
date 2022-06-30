@@ -21,7 +21,7 @@ public class DecompositionNodeImpl implements DecompositionNode {
 
     @Override
     public String getLabel() {
-        return StringUtilities.getNodeLabel(this);
+        return StringUtilities.setToString(vertices);
     }
 
     @Override

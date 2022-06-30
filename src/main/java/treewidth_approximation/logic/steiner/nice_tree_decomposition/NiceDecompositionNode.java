@@ -8,10 +8,7 @@ import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 import java.util.Map;
 import java.util.Set;
 
-public interface NiceDecompositionNode {
-    Set<Integer> getVertices();
+public interface NiceDecompositionNode extends DecompositionNode {
     void compute();
-    Set<NiceDecompositionNode> getChildren();
-    void addChild(NiceDecompositionNode child);
     Map<SubProblem, SubSolution> getSolutions();
 }

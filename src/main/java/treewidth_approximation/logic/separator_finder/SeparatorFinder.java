@@ -12,8 +12,10 @@ import java.util.Set;
 public class SeparatorFinder {
     public static class NoSeparatorExistsException extends Exception {}
 
+    /**
+     *  finds a balanced separator for W of size order or smaller
+     */
     public static Set<Integer> findSeparatorIds(TAGraph graph, Set<Integer> W, int order) throws NoSeparatorExistsException {
-        // finds a balanced separator for W of size order or smaller
 
         int third = (W.size()+2)/3;
         List<Integer> limits = List.of(2*third, 2*third, order);

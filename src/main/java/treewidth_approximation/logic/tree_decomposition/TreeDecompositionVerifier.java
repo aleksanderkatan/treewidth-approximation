@@ -19,7 +19,7 @@ public class TreeDecompositionVerifier {
         if (node != null) {
             if (verbose) {
                 System.out.println("A bag with too many vertices (" + node.getVertices().size() + ")");
-                System.out.println(StringUtilities.getNodeLabel(node));
+                System.out.println(node.getLabel());
             }
             return false;
         }

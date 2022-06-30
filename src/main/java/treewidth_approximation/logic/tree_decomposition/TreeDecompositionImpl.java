@@ -8,23 +8,20 @@ public class TreeDecompositionImpl implements TreeDecomposition {
     private final DecompositionNode root;
 
     public TreeDecompositionImpl(DecompositionNode root) { this.root = root; }
+
+    @Override
     public DecompositionNode getRoot() { return root; }
 
     @Override
-    public void collapse() {
-        collapseNode(root);
+    public TreeDecomposition copy() {
+        return new TreeDecompositionImpl(copyNode(root));
     }
 
-    private void collapseNode(DecompositionNode node) {
+    private DecompositionNode copyNode(DecompositionNode node) {
+        DecompositionNode result = new DecompositionNodeImpl(node.getVertices());
         for (DecompositionNode child : new ArrayList<>(node.getChildren())) {
-            collapseNode(child);
-
-            if (node.getVertices().containsAll(child.getVertices())) {
-                node.removeChild(child);
-                for (DecompositionNode child2 : child.getChildren()) {
-                    node.addChild(child2);
-                }
-            }
+            result.addChild(copyNode(child));
         }
+        return result;
     }
 }
