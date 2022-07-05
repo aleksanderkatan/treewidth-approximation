@@ -1,6 +1,8 @@
 package treewidth_approximation.logic.tree_decomposition;
 
 import org.javatuples.Pair;
+import prefuse.data.Edge;
+import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.misc.StringUtilities;
@@ -24,10 +26,10 @@ public class TreeDecompositionVerifier {
             return false;
         }
 
-        Set<Pair<Integer, Integer>> edges = new HashSet<>();
+        Set<TAEdge> edges = new HashSet<>();
         for (TAVertex v : graph.getVertices()) {
             for (TAVertex n : v.getNeighbours()) {
-                edges.add(new Pair<>(min(v.getId(), n.getId()), max(v.getId(), n.getId())));
+                edges.add(new TAEdge(v.getId(), n.getId()));
             }
         }
 
@@ -49,8 +51,8 @@ public class TreeDecompositionVerifier {
         if (! edges.isEmpty()) {
             if (verbose) {
                 System.out.println("Not all edges were considered");
-                for (Pair<Integer, Integer> edge : edges) {
-                    System.out.println(edge.getValue0().toString() + " " + edge.getValue1().toString());
+                for (TAEdge edge : edges) {
+                    System.out.println(edge.getFirst() + " " + edge.getSecond());
                 }
             }
             return false;
@@ -72,13 +74,13 @@ public class TreeDecompositionVerifier {
         return null;
     }
 
-    private static void verifyEdges(DecompositionNode node, Set<Pair<Integer, Integer>> remainingEdges) {
+    private static void verifyEdges(DecompositionNode node, Set<TAEdge> remainingEdges) {
         for (DecompositionNode child : node.getChildren()) {
             verifyEdges(child, remainingEdges);
         }
         for (Integer a : node.getVertices()) {
             for (Integer b : node.getVertices()) {
-                remainingEdges.remove(new Pair<>(min(a, b), max(a, b)));
+                remainingEdges.remove(new TAEdge(a, b));
             }
         }
     }

@@ -1,14 +1,13 @@
 package treewidth_approximation;
 
-import org.javatuples.Pair;
+import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.random_graph_provider.RandomGraphProvider;
 import treewidth_approximation.logic.random_graph_provider.RandomGraphProviderImpl;
-import treewidth_approximation.logic.separator_finder.SeparatorFinder;
 import treewidth_approximation.logic.steiner.SteinerInstance;
+import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceTreeDecomposition;
 import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceTreeDecompositionGenerator;
-import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 import treewidth_approximation.logic.tree_decomposition.TreeDecompositionFinder;
 import treewidth_approximation.logic.tree_decomposition.TreeDecompositionVerifier;
 import treewidth_approximation.view.PrefuseGraphShower;
@@ -20,11 +19,17 @@ public class Program {
     public static void main(String[] args) {
         RandomGraphProvider provider = new RandomGraphProviderImpl(new Random(0));
 
-        int expectedTreeWidth = 4;
-        TAGraph g = provider.getGridSubgraph(250, expectedTreeWidth, 0.8);
+        int expectedTreeWidth = 1;
+//        TAGraph g = provider.getGridSubgraph(15, expectedTreeWidth, 0.8);
+        TAGraph g = provider.getRandom(10, 0.3);
         g = g.splitIntoConnectedComponents(true).get(0);
+        Set<Integer> terminals = provider.getRandomVertexSubset(g, 3).stream().map(TAVertex::getId).collect(Collectors.toSet());
+        SteinerInstance steiner = new SteinerInstance(g, terminals, new HashMap<>());
 
-        PrefuseGraphShower.showGraphWithIds(g, new HashSet<>(), "Graph of expected treewidth " + expectedTreeWidth);
+        steiner.getSelected().add(new TAEdge(4, 3));
+        PrefuseGraphShower.showSteinerInstance(steiner, "Graph of expected treewidth " + expectedTreeWidth);
+//        PrefuseGraphShower.showGraphWithIds(steiner.getGraph(), new HashSet<>(), "graf");
+
         TreeDecompositionFinder.Result r = TreeDecompositionFinder.findDecomposition(g, expectedTreeWidth);
         if (!r.successful) {
             PrefuseGraphShower.showGraphWithIds(g, r.setWithoutSeparator, "Set without balanced separator of order " + (expectedTreeWidth + 1));
@@ -38,8 +43,9 @@ public class Program {
             return;
         }
 
-        TreeDecomposition niceDecomposition = NiceTreeDecompositionGenerator.generate(r.decomposition, null);
+        NiceTreeDecomposition niceDecomposition = NiceTreeDecompositionGenerator.generate(r.decomposition, steiner);
         TreeDecompositionVerifier.verify(niceDecomposition, g, 4 * (expectedTreeWidth + 1), true);
         PrefuseGraphShower.showTreeDecomposition(niceDecomposition, "Nice decomposition");
+        niceDecomposition.getRoot().compute();
     }
 }

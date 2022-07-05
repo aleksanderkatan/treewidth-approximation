@@ -4,7 +4,7 @@ import java.util.Set;
 
 public interface TAVertex {
     int getId();
-    void setId(int id);
+//    void setId(int id);
     Set<TAVertex> getNeighbours();
     Set<Integer> getNeighboursIds();
     void addNeighbour(TAVertex neighbour);

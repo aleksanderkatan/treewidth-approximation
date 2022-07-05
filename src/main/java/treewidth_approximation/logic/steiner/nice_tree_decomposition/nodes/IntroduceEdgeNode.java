@@ -1,14 +1,14 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
 
-import org.javatuples.Pair;
+import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.misc.StringUtilities;
 
 import java.util.Set;
 
 public class IntroduceEdgeNode extends NiceDecompositionNodeImpl {
-    private final Pair<Integer, IntroduceNode> edge;
+    private final TAEdge edge;
 
-    public IntroduceEdgeNode(Set<Integer> vertices, Pair<Integer, IntroduceNode> edge) {
+    public IntroduceEdgeNode(Set<Integer> vertices, TAEdge edge) {
         super(vertices);
         this.edge = edge;
     }
@@ -21,6 +21,6 @@ public class IntroduceEdgeNode extends NiceDecompositionNodeImpl {
 
     @Override
     public String getLabel() {
-        return StringUtilities.setToString(vertices) + " - INTRODUCES EDGE " + edge.getValue0() + " " + edge.getValue1();
+        return StringUtilities.setToString(vertices) + " - INTRODUCES EDGE " + edge.getFirst() + " " + edge.getSecond();
     }
 }

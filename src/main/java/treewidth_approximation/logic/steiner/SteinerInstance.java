@@ -1,6 +1,7 @@
 package treewidth_approximation.logic.steiner;
 
 import org.javatuples.Pair;
+import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.graph.TAGraph;
 
 import java.util.HashSet;
@@ -10,10 +11,10 @@ import java.util.Set;
 public class SteinerInstance {
     private final TAGraph graph;
     private final Set<Integer> terminals;
-    private final Map<Pair<Integer, Integer>, Integer> weights;
-    private final Set<Pair<Integer, Integer>> selected;
+    private final Map<TAEdge, Integer> weights;
+    private final Set<TAEdge> selected;
 
-    public SteinerInstance(TAGraph graph, Set<Integer> terminals, Map<Pair<Integer, Integer>, Integer> weights) {
+    public SteinerInstance(TAGraph graph, Set<Integer> terminals, Map<TAEdge, Integer> weights) {
         this.graph = graph;
         this.terminals = terminals;
         this.weights = weights;
@@ -27,22 +28,19 @@ public class SteinerInstance {
 
     public Integer getEdgeWeight(int u, int v) {
         Integer result;
-        result = weights.get(new Pair<>(u, v));
-        if (result != null)
-            return result;
-        result = weights.get(new Pair<>(v, u));
+        if (!graph.hasEdge(u, v)) {
+            return 0;
+        }
+        result = weights.get(new TAEdge(u, v));
         if (result != null)
             return result;
         return 1;
     }
 
-    public void setSelected(Set<Pair<Integer, Integer>> selected) {
+    public void setSelected(Set<TAEdge> selected) {
         this.selected.clear();
-        for (Pair<Integer, Integer> pair : selected) {
-            Pair<Integer, Integer> toAdd = new Pair<>(Math.min(pair.getValue0(), pair.getValue1()), Math.max(pair.getValue0(), pair.getValue1()));
-            this.selected.add(toAdd);
-        }
+        this.selected.addAll(selected);
     }
 
-    public Set<Pair<Integer, Integer>> getSelected() { return selected; }
+    public Set<TAEdge> getSelected() { return selected; }
 }

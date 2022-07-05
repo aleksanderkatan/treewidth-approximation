@@ -27,16 +27,26 @@ public class TAGraphImpl implements TAGraph {
     }
 
     @Override
-    public void normalizeIds() {
-        Collection<TAVertex> temp = getVertices();
-        vertices = new HashMap<>();
+    public TAGraph copyNormalized() {
+        Map<TAVertex, Integer> map = new HashMap<>();
 
         int i = 0;
-        for (TAVertex v : temp) {
-            v.setId(i);
-            vertices.put(i, v);
+        for (TAVertex v : vertices.values()) {
+            map.put(v, i);
             i++;
         }
+
+        TAGraph result = new TAGraphImpl();
+
+        for (TAVertex v : vertices.values()) {
+            result.addVertex(map.get(v));
+        }
+        for (TAVertex v : vertices.values()) {
+            for (TAVertex n : v.getNeighbours()) {
+                result.addEdge(map.get(v), map.get(n));
+            }
+        }
+        return result;
     }
 
     @Override
@@ -82,6 +92,11 @@ public class TAGraphImpl implements TAGraph {
     @Override
     public void removeEdge(int firstId, int secondId) {
         removeEdge(vertices.get(firstId), vertices.get(secondId));
+    }
+
+    @Override
+    public boolean hasEdge(int firstId, int secondId) {
+        return vertices.get(firstId).getNeighboursIds().contains(secondId);
     }
 
     @Override
@@ -160,7 +175,7 @@ public class TAGraphImpl implements TAGraph {
         for (int i = 0; i<= vertices.size(); i++) componentsBySize.add(new ArrayList<>());
         for (TAGraph g : components) {
             if (normalizeIds) {
-                g.normalizeIds();
+                g = g.copyNormalized();
             }
             componentsBySize.get(g.getVertices().size()).add(g);
         }

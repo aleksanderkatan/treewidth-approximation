@@ -17,6 +17,6 @@ public class LeafNode extends NiceDecompositionNodeImpl {
 
     @Override
     public String getLabel() {
-        return "LEAF";
+        return StringUtilities.setToString(vertices) + " - LEAF";
     }
 }

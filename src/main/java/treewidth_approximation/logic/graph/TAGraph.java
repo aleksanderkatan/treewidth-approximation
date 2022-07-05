@@ -8,7 +8,7 @@ public interface TAGraph {
     Set<Integer> getVerticesIds();
 
     TAVertex getVertexById(int id);
-    void normalizeIds();
+    TAGraph copyNormalized();
 
     TAVertex addVertex(int id);
     void removeVertex(TAVertex vertex);
@@ -18,6 +18,7 @@ public interface TAGraph {
     void addEdge(int firstId, int secondId);
     void removeEdge(TAVertex first, TAVertex second);
     void removeEdge(int firstId, int secondId);
+    boolean hasEdge(int firstId, int secondId);
 
     TAGraph copyRestricting(Set<Integer> restricted);
     TAGraph subgraphInducedBy(Set<Integer> vertices);

@@ -6,11 +6,13 @@ import java.util.stream.Collectors;
 
 public class TAVertexImpl implements TAVertex {
     private final Set<TAVertex> neighbours;
-    private int id;
+    private final Set<Integer> neighboursIds;
+    private final int id;
 
     public TAVertexImpl(int id) {
         this.id = id;
         neighbours = new HashSet<>();
+        neighboursIds = new HashSet<>();
     }
 
     @Override
@@ -18,10 +20,17 @@ public class TAVertexImpl implements TAVertex {
         return id;
     }
 
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
+//    @Override
+//    public void setId(int id) {
+//        // they remember old id
+//        for (TAVertex neighbour : neighbours) {
+//            neighbour.removeNeighbour(this);
+//        }
+//        this.id = id;
+//        for (TAVertex neighbour : neighbours) {
+//            neighbour.addNeighbour(this);
+//        }
+//    }
 
     @Override
     public Set<TAVertex> getNeighbours() {
@@ -30,16 +39,18 @@ public class TAVertexImpl implements TAVertex {
 
     @Override
     public Set<Integer> getNeighboursIds() {
-        return getNeighbours().stream().map(TAVertex::getId).collect(Collectors.toSet());
+        return neighboursIds;
     }
 
     @Override
     public void addNeighbour(TAVertex neighbour) {
         neighbours.add(neighbour);
+        neighboursIds.add(neighbour.getId());
     }
 
     @Override
     public void removeNeighbour(TAVertex neighbour) {
         neighbours.remove(neighbour);
+        neighboursIds.remove(neighbour.getId());
     }
 }
