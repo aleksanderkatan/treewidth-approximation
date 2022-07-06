@@ -19,9 +19,9 @@ public class Program {
     public static void main(String[] args) {
         RandomGraphProvider provider = new RandomGraphProviderImpl(new Random(0));
 
-        int expectedTreeWidth = 1;
+        int expectedTreeWidth = 4;
 //        TAGraph g = provider.getGridSubgraph(15, expectedTreeWidth, 0.8);
-        TAGraph g = provider.getRandom(10, 0.3);
+        TAGraph g = provider.getRandom(100, 0.01);
         g = g.splitIntoConnectedComponents(true).get(0);
         Set<Integer> terminals = provider.getRandomVertexSubset(g, 3).stream().map(TAVertex::getId).collect(Collectors.toSet());
         SteinerInstance steiner = new SteinerInstance(g, terminals, new HashMap<>());

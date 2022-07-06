@@ -101,23 +101,26 @@ public class TAGraphImpl implements TAGraph {
 
     @Override
     public TAGraph copyRestricting(Set<Integer> restricted) {
-        TAGraph result = new TAGraphImpl();
-        List<TAVertex> originalVertices = new ArrayList<>(getVertices());
-
-        for (TAVertex v : originalVertices) {
-            if (restricted.contains(v.getId())) continue;
-            result.addVertex(v.getId());
-        }
-
-        for (TAVertex v : originalVertices) {
-            if (restricted.contains(v.getId())) continue;
-            for (TAVertex n : v.getNeighbours()) {
-                if (restricted.contains(n.getId())) continue;
-                result.addEdge(v.getId(), n.getId());
-            }
-        }
-
-        return result;
+        Set<Integer> retained = new HashSet<>(vertices.keySet());
+        retained.removeAll(restricted);
+        return subgraphInducedBy(retained);
+//        TAGraph result = new TAGraphImpl();
+//        List<TAVertex> originalVertices = new ArrayList<>(getVertices());
+//
+//        for (TAVertex v : originalVertices) {
+//            if (restricted.contains(v.getId())) continue;
+//            result.addVertex(v.getId());
+//        }
+//
+//        for (TAVertex v : originalVertices) {
+//            if (restricted.contains(v.getId())) continue;
+//            for (TAVertex n : v.getNeighbours()) {
+//                if (restricted.contains(n.getId())) continue;
+//                result.addEdge(v.getId(), n.getId());
+//            }
+//        }
+//
+//        return result;
     }
 
     @Override
