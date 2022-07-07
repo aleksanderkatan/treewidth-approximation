@@ -45,6 +45,9 @@ public class NiceTreeDecompositionGenerator {
         int U = steiner.getTerminals().iterator().next();
         addTerminal(niceRoot, U);
 
+        // fill the inducedSubgraph field in every node
+        fillInducedSubgraph(niceRoot);
+
         return new NiceTreeDecomposition(niceRoot);
     }
 
@@ -77,7 +80,7 @@ public class NiceTreeDecompositionGenerator {
                 node.removeChild(child);
             }
 
-            for (int i = 0; i < children.size()-1; i++) {
+            for (int i = 0; i < children.size() - 1; i++) {
                 DecompositionNode left = new DecompositionNodeImpl(node.getVertices());
                 DecompositionNode right = new DecompositionNodeImpl(node.getVertices());
                 left.addChild(children.get(i));
@@ -85,7 +88,7 @@ public class NiceTreeDecompositionGenerator {
                 current.addChild(right);
                 current = right;
             }
-            current.addChild(children.get(children.size()-1));
+            current.addChild(children.get(children.size() - 1));
         }
     }
 
@@ -135,13 +138,6 @@ public class NiceTreeDecompositionGenerator {
                 node.addChild(grandChild);
             }
         }
-    }
-
-    private static void addTerminal(DecompositionNode node, int U) {
-        for (DecompositionNode child : node.getChildren()) {
-            addTerminal(child, U);
-        }
-        node.getVertices().add(U);
     }
 
     private static NiceDecompositionNode generateNice(DecompositionNode node, SteinerInstance steiner) {
@@ -199,5 +195,21 @@ public class NiceTreeDecompositionGenerator {
         return result;
     }
 
+    private static void addTerminal(DecompositionNode node, int U) {
+        for (DecompositionNode child : node.getChildren()) {
+            addTerminal(child, U);
+        }
+        node.getVertices().add(U);
+    }
 
+    private static void fillInducedSubgraph(NiceDecompositionNode node) {
+        for (DecompositionNode child : node.getChildren()) {
+            fillInducedSubgraph((NiceDecompositionNode)child);
+        }
+        if (node.getChildren().size() == 0) {
+            node.updateSubgraph(null);
+        } else {
+            node.updateSubgraph(((NiceDecompositionNode)node.getChildren().iterator().next()).getSubgraph());
+        }
+    }
 }

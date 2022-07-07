@@ -32,6 +32,8 @@ public class PartitionExecutor<T, S>{
     }
 
     private S split(int depth, int currentAmountOfSets) {
+        if (currentAmountOfSets > maxPartitionsAmount) return null;
+
         if (depth == elements.size()) {
             Partition<T> partition = new Partition<>(setsOfElements);
             if (!(minPartitionsAmount <= currentAmountOfSets && currentAmountOfSets <= maxPartitionsAmount))
@@ -56,16 +58,10 @@ public class PartitionExecutor<T, S>{
             }
         }
         T elem = elements.get(depth);
-        // first call needs special case
-//        if (depth == 0) {
-//            setsOfElements.put(elem, 0);
-//            return split(1, 1);
-//        } else {
-            for (int i = 0; i < min(currentAmountOfSets + 1, maxPartitionsAmount); i++) {
-                setsOfElements.put(elem, i);
-                S result = split(depth + 1, (i == currentAmountOfSets) ? currentAmountOfSets + 1 : currentAmountOfSets);
-                if (result != null) return result;
-//            }
+        for (int i = 0; i < min(currentAmountOfSets + 1, maxPartitionsAmount); i++) {
+            setsOfElements.put(elem, i);
+            S result = split(depth + 1, (i == currentAmountOfSets) ? currentAmountOfSets + 1 : currentAmountOfSets);
+            if (result != null) return result;
         }
         return null;
     }

@@ -1,5 +1,7 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
 
+import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.misc.PartitionExecutor;
 import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.steiner.PartialSolution;
 import treewidth_approximation.logic.steiner.SubProblem;
@@ -10,6 +12,7 @@ import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 import java.util.*;
 
 public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode {
+    protected TAGraph inducedSubgraph;
     protected final Set<DecompositionNode> children;
     protected final Set<Integer> vertices;
     protected final PartialSolution solution;
@@ -23,6 +26,11 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
     @Override
     public Set<Integer> getVertices() {
         return vertices;
+    }
+
+    @Override
+    public TAGraph getSubgraph() {
+        return inducedSubgraph;
     }
 
     @Override
@@ -42,7 +50,24 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
 
     @Override
     public void compute() {
+        // default implementation - for Forget, Introduce and Introduce Edge.
+        // Leaf and Join further override this
+        PartitionExecutor<Integer, Boolean> partitionExecutor = new PartitionExecutor<>(new ArrayList<>(vertices), 2, vertices.size(), false, partition -> {
+            int amount = partition.getAmountOfSets();
+            // let set (amount-1) be X
 
+            // either one of them is the set of vertices not chosen, or all are chosen
+            // cases!!
+
+//            Set<Integer> X = partition.getSet(amount-1);
+//            Map<Integer, Integer>
+
+//            SubProblem subProblem = new SubProblem()
+
+            return null;
+        });
+
+        partitionExecutor.run();
     }
 
     @Override

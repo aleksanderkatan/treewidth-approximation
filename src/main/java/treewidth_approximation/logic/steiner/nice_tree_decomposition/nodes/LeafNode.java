@@ -1,10 +1,12 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
 
+import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.graph.TAGraphImpl;
 import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.steiner.SubProblem;
+import treewidth_approximation.logic.steiner.SubSolution;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public class LeafNode extends NiceDecompositionNodeImpl {
     public LeafNode() {
@@ -12,7 +14,14 @@ public class LeafNode extends NiceDecompositionNodeImpl {
     }
 
     @Override
-    public void computeSingular(SubProblem subProblem) {
+    public void updateSubgraph(TAGraph subgraph) {
+        inducedSubgraph = new TAGraphImpl();
+        inducedSubgraph.addVertex(vertices.iterator().next());
+    }
+
+    @Override
+    public SubSolution computeSingular(SubProblem subProblem) {
+        return null;
 
     }
 
