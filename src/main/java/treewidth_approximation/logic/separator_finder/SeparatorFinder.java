@@ -18,7 +18,7 @@ public class SeparatorFinder {
      */
     public static Set<Integer> findSeparatorIds(TAGraph graph, Set<Integer> W, int order) throws NoSeparatorExistsException {
         PartitionExecutor<Integer, Set<Integer>> executor =
-                new PartitionExecutor<>(new ArrayList<>(W), 3, (partition) -> {
+                new PartitionExecutor<>(new ArrayList<>(W), 3, 3, true, (partition) -> {
                     Set<Integer> A = partition.getSet(0);
                     Set<Integer> B = partition.getSet(1);
                     Set<Integer> C = partition.getSet(2);

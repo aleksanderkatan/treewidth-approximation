@@ -1,6 +1,7 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
 
 import treewidth_approximation.logic.misc.StringUtilities;
+import treewidth_approximation.logic.steiner.PartialSolution;
 import treewidth_approximation.logic.steiner.SubProblem;
 import treewidth_approximation.logic.steiner.SubSolution;
 import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceDecompositionNode;
@@ -11,10 +12,12 @@ import java.util.*;
 public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode {
     protected final Set<DecompositionNode> children;
     protected final Set<Integer> vertices;
+    protected final PartialSolution solution;
 
     public NiceDecompositionNodeImpl(Set<Integer> vertices) {
         this.children = new HashSet<>();
         this.vertices = vertices;
+        this.solution = new PartialSolution();
     }
 
     @Override
@@ -33,10 +36,14 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
     }
 
     @Override
-    public Map<SubProblem, SubSolution> getSolutions() {
-        return null;
+    public PartialSolution getSolutions() {
+        return solution;
     }
 
+    @Override
+    public void compute() {
+
+    }
 
     @Override
     public String getLabel() {

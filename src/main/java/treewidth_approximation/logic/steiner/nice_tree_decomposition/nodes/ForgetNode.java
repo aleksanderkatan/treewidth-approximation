@@ -1,6 +1,7 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
 
 import treewidth_approximation.logic.misc.StringUtilities;
+import treewidth_approximation.logic.steiner.SubProblem;
 
 import java.util.Set;
 
@@ -13,7 +14,7 @@ public class ForgetNode extends NiceDecompositionNodeImpl {
     }
 
     @Override
-    public void compute() {
+    public void computeSingular(SubProblem subProblem) {
 
     }
 

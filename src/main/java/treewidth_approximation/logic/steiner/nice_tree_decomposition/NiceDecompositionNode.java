@@ -10,5 +10,6 @@ import java.util.Set;
 
 public interface NiceDecompositionNode extends DecompositionNode {
     void compute();
-    Map<SubProblem, SubSolution> getSolutions();
+    void computeSingular(SubProblem subProblem);
+    PartialSolution getSolutions();
 }

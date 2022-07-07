@@ -1,8 +1,24 @@
 package treewidth_approximation.logic.steiner;
 
+import treewidth_approximation.logic.misc.Partition;
+
+import java.util.HashMap;
 import java.util.Map;
 
+// Box for a singular map
 public class PartialSolution {
-    private Map<SubProblem, SubSolution> map;
+    private final Map<SubProblem, SubSolution> map;
+
+    public PartialSolution() {
+        map = new HashMap<>();
+    }
+
+    public void putSolution(SubProblem subProblem, SubSolution subSolution) {
+        map.put(subProblem, subSolution);
+    }
+
+    public SubSolution getSolution(SubProblem subProblem) {
+        return map.get(subProblem);
+    }
 
 }

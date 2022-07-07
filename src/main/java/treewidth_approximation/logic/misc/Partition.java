@@ -43,6 +43,10 @@ public class Partition<T> {
         return elements.get(element);
     }
 
+    public List<Set<T>> getSets() { return sets; }
+
+    public Map<T, Integer> getElements() { return elements; }
+
     @Override
     public int hashCode() {
         return Objects.hash(sets, elements);
@@ -58,7 +62,7 @@ public class Partition<T> {
 
         Partition c = (Partition) obj;
 
-        return (sets == c.sets) && (elements == c.elements);
+        return (sets.equals(c.sets)) && (elements.equals(c.elements));
     }
 
     @Override
