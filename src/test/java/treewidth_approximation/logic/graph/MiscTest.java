@@ -1,16 +1,15 @@
 package treewidth_approximation.logic.graph;
 
 import org.junit.jupiter.api.Test;
+import treewidth_approximation.logic.misc.Partition;
 import treewidth_approximation.logic.misc.PartitionExecutor;
 import treewidth_approximation.logic.misc.Permutation;
 import treewidth_approximation.logic.misc.PermutationExecutor;
 import treewidth_approximation.logic.separator_finder.FlowNetwork;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MiscTest {
@@ -52,6 +51,54 @@ public class MiscTest {
         assertTrue(permutations.contains(p4));
         assertTrue(permutations.contains(p5));
         assertEquals(6, permutations.size());
+    }
+
+    @Test
+    void testPartitionEquals() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 1),
+                entry(2, 2),
+                entry(3, 2)
+        ));
+        Partition<Integer> p1 = new Partition<>(Map.ofEntries(
+                entry(1, 1),
+                entry(2, 2),
+                entry(3, 2)
+        ));
+
+        assertEquals(p0, p1);
+    }
+
+    @Test
+    void testPartitionNotEquals() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 1),
+                entry(2, 2),
+                entry(3, 2)
+        ));
+        Partition<Integer> p1 = new Partition<>(Map.ofEntries(
+                entry(1, 1),
+                entry(2, 3),
+                entry(3, 2)
+        ));
+
+        assertNotEquals(p0, p1);
+    }
+
+    @Test
+    void testPartitionDifferentTypes() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 1),
+                entry(2, 2),
+                entry(3, 2)
+        ));
+        Partition<String> p1 = new Partition<>(Map.ofEntries(
+                entry("1", 1),
+                entry("2", 2),
+                entry("3", 2)
+        ));
+
+        assertNotEquals(p0, p1);
     }
 
     @Test

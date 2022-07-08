@@ -5,8 +5,8 @@ import treewidth_approximation.logic.graph.TAEdge;
 import java.util.*;
 
 public class Partition<T> {
-    List<Set<T>> sets;
-    Map<T, Integer> elements;
+    private final List<Set<T>> sets;
+    private final Map<T, Integer> elements;
 
     public Partition(Map<T, Integer> elements) {
         this.elements = elements;
@@ -36,6 +36,9 @@ public class Partition<T> {
     }
 
     public Set<T> getSet(int index) {
+        if (index >= sets.size()) {
+            return new HashSet<>();
+        }
         return sets.get(index);
     }
 
@@ -48,21 +51,16 @@ public class Partition<T> {
     public Map<T, Integer> getElements() { return elements; }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(sets, elements);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Partition<?> partition = (Partition<?>) o;
+        return Objects.equals(sets, partition.sets) && Objects.equals(elements, partition.elements);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this)
-            return true;
-
-        if (!(obj instanceof Partition))
-            return false;
-
-        Partition c = (Partition) obj;
-
-        return (sets.equals(c.sets)) && (elements.equals(c.elements));
+    public int hashCode() {
+        return Objects.hash(sets, elements);
     }
 
     @Override

@@ -1,16 +1,18 @@
 package treewidth_approximation.logic.steiner;
 
+import treewidth_approximation.logic.misc.Partition;
+
 import java.util.Set;
 
 public class SubProblem {
     private final Set<Integer> X;
-    private final Partition partition;
+    private final Partition<Integer> partition;
 
-    public SubProblem(Set<Integer> X, Partition partition) {
+    public SubProblem(Set<Integer> X, Partition<Integer> partition) {
         this.X = X;
         this.partition = partition;
     }
 
     public Set<Integer> getX() { return X; }
-    public Partition getPartition() { return partition; }
+    public Partition<Integer> getPartition() { return partition; }
 }
