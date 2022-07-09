@@ -1,7 +1,5 @@
 package treewidth_approximation.logic.misc;
 
-import treewidth_approximation.logic.graph.TAEdge;
-
 import java.util.*;
 
 public class Partition<T> {
@@ -23,6 +21,55 @@ public class Partition<T> {
         }
     }
 
+    public Partition<T> combine(Partition<T> other) {
+        Map<T, Integer> newMap = new HashMap<>();
+
+        int currentSet = 0;
+        for (T elem : elements.keySet()) {
+            if (newMap.containsKey(elem)) continue;
+
+            Queue<T> q = new LinkedList<>();
+            q.add(elem);
+            while (!q.isEmpty()) {
+                T current = q.remove();
+                Set<T> combined = sets.get(elements.get(current));
+                combined.addAll(other.sets.get(other.elements.get(current)));
+                for (T toVisit : combined) {
+                    if (!newMap.containsKey(toVisit)) {
+                        newMap.put(toVisit, currentSet);
+                        q.add(toVisit);
+                    }
+                }
+            }
+            currentSet++;
+        }
+
+        return new Partition<>(newMap);
+    }
+
+    public Partition<T> copyRestrictingSet(int setIndex) {
+        Map<T, Integer> newPartitionMap = new HashMap<>();
+        for (var entry : elements.entrySet()) {
+            int part = entry.getValue();
+            if (part == setIndex) continue;
+            if (part > setIndex) {
+                part--;
+            }
+            newPartitionMap.put(entry.getKey(), part);
+        }
+        return new Partition<>(newPartitionMap);
+    }
+
+    public Partition<T> copyRestrictingElement(T elem) {
+        int setIndex = elements.get(elem);
+        if (sets.get(setIndex).size() == 1) {
+            return copyRestrictingSet(setIndex);
+        }
+        Map<T, Integer> newMap = new HashMap<>(elements);
+        newMap.remove(elem);
+        return new Partition<>(newMap);
+    }
+
     public int getAmountOfSets() {
         return sets.size();
     }
@@ -42,7 +89,7 @@ public class Partition<T> {
         return sets.get(index);
     }
 
-    public int getSetOfElement(T element) {
+    public int getSetIndexOfElement(T element) {
         return elements.get(element);
     }
 

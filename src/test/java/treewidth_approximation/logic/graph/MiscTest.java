@@ -5,7 +5,6 @@ import treewidth_approximation.logic.misc.Partition;
 import treewidth_approximation.logic.misc.PartitionExecutor;
 import treewidth_approximation.logic.misc.Permutation;
 import treewidth_approximation.logic.misc.PermutationExecutor;
-import treewidth_approximation.logic.separator_finder.FlowNetwork;
 
 import java.util.*;
 
@@ -56,14 +55,14 @@ public class MiscTest {
     @Test
     void testPartitionEquals() {
         Partition<Integer> p0 = new Partition<>(Map.ofEntries(
-                entry(1, 1),
-                entry(2, 2),
-                entry(3, 2)
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1)
         ));
         Partition<Integer> p1 = new Partition<>(Map.ofEntries(
-                entry(1, 1),
-                entry(2, 2),
-                entry(3, 2)
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1)
         ));
 
         assertEquals(p0, p1);
@@ -72,13 +71,13 @@ public class MiscTest {
     @Test
     void testPartitionNotEquals() {
         Partition<Integer> p0 = new Partition<>(Map.ofEntries(
-                entry(1, 1),
-                entry(2, 2),
-                entry(3, 2)
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1)
         ));
         Partition<Integer> p1 = new Partition<>(Map.ofEntries(
-                entry(1, 1),
-                entry(2, 3),
+                entry(1, 0),
+                entry(2, 1),
                 entry(3, 2)
         ));
 
@@ -88,14 +87,14 @@ public class MiscTest {
     @Test
     void testPartitionDifferentTypes() {
         Partition<Integer> p0 = new Partition<>(Map.ofEntries(
-                entry(1, 1),
-                entry(2, 2),
-                entry(3, 2)
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1)
         ));
         Partition<String> p1 = new Partition<>(Map.ofEntries(
-                entry("1", 1),
-                entry("2", 2),
-                entry("3", 2)
+                entry("1", 0),
+                entry("2", 1),
+                entry("3", 1)
         ));
 
         assertNotEquals(p0, p1);
@@ -114,9 +113,9 @@ public class MiscTest {
 
         PartitionExecutor<Integer, Boolean> partitionExecutor = new PartitionExecutor<>(List.of(1, 2, 3), 1, 3, false, (partition) -> {
             List<Integer> current = new ArrayList<>();
-            current.add(partition.getSetOfElement(1));
-            current.add(partition.getSetOfElement(2));
-            current.add(partition.getSetOfElement(3));
+            current.add(partition.getSetIndexOfElement(1));
+            current.add(partition.getSetIndexOfElement(2));
+            current.add(partition.getSetIndexOfElement(3));
             partitions.add(current);
             return null;
         });
@@ -157,9 +156,9 @@ public class MiscTest {
 
         PartitionExecutor<Integer, Boolean> partitionExecutor = new PartitionExecutor<>(List.of(1, 2, 3), 1, 3, true, (partition) -> {
             List<Integer> current = new ArrayList<>();
-            current.add(partition.getSetOfElement(1));
-            current.add(partition.getSetOfElement(2));
-            current.add(partition.getSetOfElement(3));
+            current.add(partition.getSetIndexOfElement(1));
+            current.add(partition.getSetIndexOfElement(2));
+            current.add(partition.getSetIndexOfElement(3));
             partitions.add(current);
             return null;
         });
@@ -199,9 +198,9 @@ public class MiscTest {
 
         PartitionExecutor<Integer, Boolean> partitionExecutor = new PartitionExecutor<>(List.of(1, 2, 3), 2, 2, true, (partition) -> {
             List<Integer> current = new ArrayList<>();
-            current.add(partition.getSetOfElement(1));
-            current.add(partition.getSetOfElement(2));
-            current.add(partition.getSetOfElement(3));
+            current.add(partition.getSetIndexOfElement(1));
+            current.add(partition.getSetIndexOfElement(2));
+            current.add(partition.getSetIndexOfElement(3));
             partitions.add(current);
             return null;
         });
@@ -217,5 +216,147 @@ public class MiscTest {
         assertTrue(partitions.contains(l30));
         assertTrue(partitions.contains(l31));
         assertEquals(6, partitions.size());
+    }
+
+    @Test
+    void testPartitionCopyRestrictingSet() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1)
+        ));
+        Partition<Integer> p1 = new Partition<>(Map.ofEntries(
+                entry(2, 0),
+                entry(3, 0)
+        ));
+
+
+        p0 = p0.copyRestrictingSet(0);
+
+
+        assertEquals(p0, p1);
+    }
+
+    @Test
+    void testPartitionCopyRestrictingElementNoRemoveSet() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1)
+        ));
+        Partition<Integer> p1 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(3, 1)
+        ));
+
+
+        Partition<Integer> result = p0.copyRestrictingElement(2);
+
+
+        assertEquals(p1, result);
+    }
+
+    @Test
+    void testPartitionCopyRestrictingElementRemoveSet() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1)
+        ));
+
+
+        Partition<Integer> result = p0.copyRestrictingElement(1);
+
+
+        assertEquals(Set.of(2, 3), result.getSet(result.getSetIndexOfElement(2)));
+    }
+
+    @Test
+    void testPartitionCombineSame() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1)
+        ));
+
+
+        Partition<Integer> result = p0.combine(p0);
+
+
+        assertEquals(Set.of(1), result.getSet(result.getSetIndexOfElement(1)));
+        assertEquals(Set.of(2, 3), result.getSet(result.getSetIndexOfElement(2)));
+    }
+
+    @Test
+    void testPartitionCombineSimple() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1)
+        ));
+        Partition<Integer> p1 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(2, 0),
+                entry(3, 1)
+        ));
+
+
+        Partition<Integer> result = p0.combine(p1);
+
+
+        assertEquals(Set.of(1, 2, 3), result.getSet(result.getSetIndexOfElement(1)));
+    }
+
+    @Test
+    void testPartitionCombineComplex() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(2, 0),
+                entry(3, 0),
+                entry(4, 1),
+                entry(5, 1),
+                entry(6, 2)
+        ));
+        Partition<Integer> p1 = new Partition<>(Map.ofEntries(
+                entry(1, 3),
+                entry(2, 3),
+                entry(3, 2),
+                entry(4, 1),
+                entry(5, 0),
+                entry(6, 0)
+        ));
+
+
+        Partition<Integer> result = p0.combine(p1);
+
+
+        assertEquals(Set.of(1, 2, 3), result.getSet(result.getSetIndexOfElement(1)));
+        assertEquals(Set.of(4, 5, 6), result.getSet(result.getSetIndexOfElement(4)));
+    }
+
+    @Test
+    void testPartitionCombineLoop() {
+        Partition<Integer> p0 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(2, 0),
+                entry(3, 1),
+                entry(4, 1),
+                entry(5, 2),
+                entry(6, 2)
+        ));
+        Partition<Integer> p1 = new Partition<>(Map.ofEntries(
+                entry(1, 0),
+                entry(2, 1),
+                entry(3, 1),
+                entry(4, 2),
+                entry(5, 2),
+                entry(6, 0)
+        ));
+
+
+        Partition<Integer> result = p0.combine(p1);
+
+
+        assertEquals(Set.of(1, 2, 3, 4, 5, 6), result.getSet(result.getSetIndexOfElement(1)));
     }
 }

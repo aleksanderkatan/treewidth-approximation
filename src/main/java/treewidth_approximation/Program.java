@@ -21,7 +21,8 @@ public class Program {
 
         int expectedTreeWidth = 4;
 //        TAGraph g = provider.getGridSubgraph(15, expectedTreeWidth, 0.8);
-        TAGraph g = provider.getRandom(100, 0.01);
+//        TAGraph g = provider.getRandom(100, 0.01);
+        TAGraph g = provider.getRandom(8, 0.8);
         g = g.splitIntoConnectedComponents(true).get(0);
         Set<Integer> terminals = provider.getRandomVertexSubset(g, 3).stream().map(TAVertex::getId).collect(Collectors.toSet());
         SteinerInstance steiner = new SteinerInstance(g, terminals, new HashMap<>());
@@ -47,5 +48,6 @@ public class Program {
         TreeDecompositionVerifier.verify(niceDecomposition, g, 4 * (expectedTreeWidth + 1), true);
         PrefuseGraphShower.showTreeDecomposition(niceDecomposition, "Nice decomposition");
         niceDecomposition.getRoot().compute();
+        System.out.println("Finished");
     }
 }

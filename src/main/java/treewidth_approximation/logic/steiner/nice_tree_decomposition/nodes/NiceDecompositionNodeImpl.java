@@ -1,9 +1,11 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
 
 import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.misc.Partition;
 import treewidth_approximation.logic.misc.PartitionExecutor;
 import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.steiner.PartialSolution;
+import treewidth_approximation.logic.steiner.SteinerInstance;
 import treewidth_approximation.logic.steiner.SubProblem;
 import treewidth_approximation.logic.steiner.SubSolution;
 import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceDecompositionNode;
@@ -12,6 +14,7 @@ import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 import java.util.*;
 
 public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode {
+    protected SteinerInstance instance;
     protected TAGraph inducedSubgraph;
     protected final Set<DecompositionNode> children;
     protected final Set<Integer> vertices;
@@ -21,6 +24,11 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
         this.children = new HashSet<>();
         this.vertices = vertices;
         this.solution = new PartialSolution();
+    }
+
+    @Override
+    public void setInstance(SteinerInstance instance) {
+        this.instance = instance;
     }
 
     @Override
@@ -52,17 +60,30 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
     public void compute() {
         // default implementation - for Forget, Introduce and Introduce Edge.
         // Leaf and Join further override this
+
+        // firstly, call compute() for all children
+        for (DecompositionNode child : getChildren()) {
+            ((NiceDecompositionNode)child).compute();
+        }
+
+        // now, for each SubProblem call singular calculate
         PartitionExecutor<Integer, Boolean> partitionExecutor = new PartitionExecutor<>(new ArrayList<>(vertices), 2, vertices.size(), false, partition -> {
             int amount = partition.getAmountOfSets();
-            // let set (amount-1) be X
+            // either one of them is the set of vertices not chosen for a subtree, or all are chosen
+            for (int i = 0; i<= amount; i++) {
+                Set<Integer> X;
+                if (i == amount) {
+                    X = new HashSet<>();
+                } else {
+                    X = partition.getSet(i);
+                }
 
-            // either one of them is the set of vertices not chosen, or all are chosen
-            // cases!!
+                Partition<Integer> subProblemPartition = partition.copyRestrictingSet(i);
 
-//            Set<Integer> X = partition.getSet(amount-1);
-//            Map<Integer, Integer>
-
-//            SubProblem subProblem = new SubProblem()
+                SubProblem subProblem = new SubProblem(X, subProblemPartition);
+                SubSolution subSolution = computeSingular(subProblem);
+                solution.putSolution(subProblem, subSolution);
+            }
 
             return null;
         });

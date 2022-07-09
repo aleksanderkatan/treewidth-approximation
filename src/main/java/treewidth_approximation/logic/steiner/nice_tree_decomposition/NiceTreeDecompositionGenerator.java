@@ -2,6 +2,7 @@ package treewidth_approximation.logic.steiner.nice_tree_decomposition;
 
 import org.javatuples.Pair;
 import treewidth_approximation.logic.graph.TAEdge;
+import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.steiner.SteinerInstance;
@@ -45,8 +46,8 @@ public class NiceTreeDecompositionGenerator {
         int U = steiner.getTerminals().iterator().next();
         addTerminal(niceRoot, U);
 
-        // fill the inducedSubgraph field in every node
-        fillInducedSubgraph(niceRoot);
+        // fill the inducedSubgraph and originalGraph field in every node
+        fillMissing(niceRoot, steiner);
 
         return new NiceTreeDecomposition(niceRoot);
     }
@@ -202,10 +203,11 @@ public class NiceTreeDecompositionGenerator {
         node.getVertices().add(U);
     }
 
-    private static void fillInducedSubgraph(NiceDecompositionNode node) {
+    private static void fillMissing(NiceDecompositionNode node, SteinerInstance instance) {
         for (DecompositionNode child : node.getChildren()) {
-            fillInducedSubgraph((NiceDecompositionNode)child);
+            fillMissing((NiceDecompositionNode)child, instance);
         }
+        node.setInstance(instance);
         if (node.getChildren().size() == 0) {
             node.updateSubgraph(null);
         } else {

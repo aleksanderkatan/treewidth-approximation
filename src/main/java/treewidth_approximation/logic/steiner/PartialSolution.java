@@ -18,7 +18,11 @@ public class PartialSolution {
     }
 
     public SubSolution getSolution(SubProblem subProblem) {
-        return map.get(subProblem);
+        SubSolution result = map.get(subProblem);
+        if (result == null) {
+            System.out.println("WARNING: a subProblem has no solution!!");
+        }
+        return result;
     }
 
 }
