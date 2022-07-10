@@ -6,6 +6,7 @@ public class Partition<T> {
     private final List<Set<T>> sets;
     private final Map<T, Integer> elements;
 
+//    normalize.
     public Partition(Map<T, Integer> elements) {
         this.elements = elements;
         sets = new ArrayList<>();
@@ -112,16 +113,16 @@ public class Partition<T> {
 
     @Override
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("Partition: { ");
+        StringBuilder builder = new StringBuilder();
+        builder.append("Partition: { ");
         for (Set<T> set : sets) {
-            s.append("{ ");
+            builder.append("{ ");
             for (T elem : set) {
-                s.append(elem).append(" ");
+                builder.append(elem).append(" ");
             }
-            s.append("} ");
+            builder.append("} ");
         }
-        s.append("}");
-        return new String(s);
+        builder.append("}");
+        return new String(builder);
     }
 }

@@ -18,20 +18,15 @@ public class TAEdge {
     public int getSecond() { return v; }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(u, v);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TAEdge edge = (TAEdge) o;
+        return u == edge.u && v == edge.v;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this)
-            return true;
-
-        if (!(obj instanceof TAEdge))
-            return false;
-
-        TAEdge c = (TAEdge) obj;
-
-        return (getFirst() == c.getFirst()) && (getSecond() == c.getSecond());
+    public int hashCode() {
+        return Objects.hash(u, v);
     }
 }

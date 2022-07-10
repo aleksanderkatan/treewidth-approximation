@@ -23,6 +23,10 @@ public class NiceTreeDecompositionGenerator {
 
     public static NiceTreeDecomposition generate(TreeDecomposition decomposition, SteinerInstance steiner) {
         TreeDecomposition copy = decomposition.copy();
+        int U = steiner.getTerminals().iterator().next();
+
+//        // remove U from every node so that it will not be introduced anywhere
+//        removeVertex(copy.getRoot(), U);
 
         // make it so there is a right amount of nodes
         collapse(copy.getRoot());
@@ -36,20 +40,26 @@ public class NiceTreeDecompositionGenerator {
         copy = new TreeDecompositionImpl(newRoot);
         addLeaves(copy.getRoot());
 
+        // terminal to be added to every decomposition node
+        addTerminal(copy.getRoot(), U);
+
         // make it so every node differs by at most one vertex from its parent
         addIntroducesAndForgets(copy.getRoot());
 
         // generate nice tree decomposition
         NiceDecompositionNode niceRoot = generateNice(copy.getRoot(), steiner);
 
-        // terminal to be added to every decomposition node
-        int U = steiner.getTerminals().iterator().next();
-        addTerminal(niceRoot, U);
-
         // fill the inducedSubgraph and originalGraph field in every node
         fillMissing(niceRoot, steiner);
 
         return new NiceTreeDecomposition(niceRoot);
+    }
+
+    private static void removeVertex(DecompositionNode node, int U) {
+        for (DecompositionNode child : node.getChildren()) {
+            removeVertex(child, U);
+        }
+        node.getVertices().remove(U);
     }
 
     private static void collapse(DecompositionNode node) {
@@ -141,11 +151,12 @@ public class NiceTreeDecompositionGenerator {
         }
     }
 
+    // instead of usual Decomposition, it constructs NiceDecomposition, also generates IntroduceEdgeNodes
     private static NiceDecompositionNode generateNice(DecompositionNode node, SteinerInstance steiner) {
         NiceDecompositionNode result = null;
         if (node.getChildren().size() == 0) {
             // leaf
-            result = new LeafNode();
+            result = new LeafNode(node.getVertices());
         }
         if (node.getChildren().size() == 1) {
             DecompositionNode child = node.getChildren().iterator().next();
@@ -173,9 +184,9 @@ public class NiceTreeDecompositionGenerator {
 
 //                // introduce all the edges before forgetting
                 NiceDecompositionNode current = result;
-                for (int vertex : nodeBag) {
+                for (int vertex : childBag) {
                     if (steiner.getGraph().hasEdge(forgotten, vertex)) {
-                        NiceDecompositionNode temp = new IntroduceEdgeNode(nodeBag, new TAEdge(forgotten, vertex));
+                        NiceDecompositionNode temp = new IntroduceEdgeNode(childBag, new TAEdge(forgotten, vertex));
                         current.addChild(temp);
                         current = temp;
                     }

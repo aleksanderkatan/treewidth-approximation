@@ -12,8 +12,8 @@ import java.util.*;
 import static java.util.Map.entry;
 
 public class LeafNode extends NiceDecompositionNodeImpl {
-    public LeafNode() {
-        super(new HashSet<>());
+    public LeafNode(Set<Integer> vertices) {
+        super(vertices);
     }
 
     @Override
@@ -32,6 +32,8 @@ public class LeafNode extends NiceDecompositionNodeImpl {
     public void compute() {
         int U = vertices.iterator().next();
 
+        // only two possibilities
+        // either U is in partition
         Partition<Integer> partition = new Partition<>(Map.ofEntries(
                 entry(U, 0)
         ));
@@ -41,6 +43,7 @@ public class LeafNode extends NiceDecompositionNodeImpl {
 
         solution.putSolution(subProblem, subSolution);
 
+        // or solution is invalid
         partition = new Partition<>(Map.ofEntries());
         X = Set.of(U);
         subProblem = new SubProblem(X, partition);

@@ -2,8 +2,10 @@ package treewidth_approximation.logic.steiner;
 
 import treewidth_approximation.logic.graph.TAEdge;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class SubSolution {
     private boolean valid;
@@ -13,7 +15,7 @@ public class SubSolution {
     private final List<SubSolution> baseSolutions;
 
     public static SubSolution getInvalidSolution() {
-        SubSolution result = new SubSolution(2<<30, null, null);
+        SubSolution result = new SubSolution(2137, null, List.of());
         result.invalidate();
         return result;
     }
@@ -25,7 +27,7 @@ public class SubSolution {
         this.baseSolutions = baseSolutions;
     }
 
-    public void invalidate() { this.valid = true; }
+    public void invalidate() { this.valid = false; }
 
     public boolean isValid() {
         return valid;
@@ -33,6 +35,17 @@ public class SubSolution {
 
     public TAEdge getEdge() {
         return edge;
+    }
+
+    public Set<TAEdge> collectEdges() {
+        Set<TAEdge> result = new HashSet<>();
+        for (SubSolution baseSubSolution : baseSolutions) {
+            result.addAll(baseSubSolution.collectEdges());
+        }
+        if (edge != null) {
+            result.add(edge);
+        }
+        return result;
     }
 
     public List<SubSolution> getBaseSolutions() {

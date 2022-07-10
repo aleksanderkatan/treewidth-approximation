@@ -33,8 +33,8 @@ public class IntroduceNode extends NiceDecompositionNodeImpl{
         NiceDecompositionNode child = (NiceDecompositionNode)children.iterator().next();
 
         // if subProblem does have a terminal in X, return invalid solution
-        for (int v : instance.getTerminals()) {
-            if (X.contains(v)) {
+        for (int t : instance.getTerminals()) {
+            if (X.contains(t)) {
                 return SubSolution.getInvalidSolution();
             }
         }
@@ -57,7 +57,10 @@ public class IntroduceNode extends NiceDecompositionNodeImpl{
         childX.remove(introduced);
         SubProblem childSubProblem = new SubProblem(childX, partition);
         SubSolution childSubSolution = child.getSolutions().getSolution(childSubProblem);
-        return new SubSolution(childSubSolution.getCost(), null, List.of(childSubSolution));
+        if (childSubSolution.isValid())
+            return new SubSolution(childSubSolution.getCost(), null, List.of(childSubSolution));
+        else
+            return SubSolution.getInvalidSolution();
     }
 
     @Override

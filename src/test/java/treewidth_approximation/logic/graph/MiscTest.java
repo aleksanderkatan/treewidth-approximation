@@ -1,10 +1,7 @@
 package treewidth_approximation.logic.graph;
 
 import org.junit.jupiter.api.Test;
-import treewidth_approximation.logic.misc.Partition;
-import treewidth_approximation.logic.misc.PartitionExecutor;
-import treewidth_approximation.logic.misc.Permutation;
-import treewidth_approximation.logic.misc.PermutationExecutor;
+import treewidth_approximation.logic.misc.*;
 
 import java.util.*;
 
@@ -358,5 +355,30 @@ public class MiscTest {
 
 
         assertEquals(Set.of(1, 2, 3, 4, 5, 6), result.getSet(result.getSetIndexOfElement(1)));
+    }
+
+    @Test
+    void testSubsetGenerator() {
+        List<Integer> elements = List.of(1, 2, 3);
+        Set<Set<Integer>> subsets = new HashSet<>();
+
+        SubsetExecutor<Integer, Boolean> subsetExecutor = new SubsetExecutor<>(new ArrayList<>(elements), subset -> {
+            subsets.add(subset);
+            return null;
+        });
+
+
+        subsetExecutor.run();
+
+
+        assertTrue(subsets.contains(Set.of()));
+        assertTrue(subsets.contains(Set.of(1)));
+        assertTrue(subsets.contains(Set.of(2)));
+        assertTrue(subsets.contains(Set.of(3)));
+        assertTrue(subsets.contains(Set.of(1, 2)));
+        assertTrue(subsets.contains(Set.of(1, 3)));
+        assertTrue(subsets.contains(Set.of(2, 3)));
+        assertTrue(subsets.contains(Set.of(1, 2, 3)));
+        assertEquals(8, subsets.size());
     }
 }

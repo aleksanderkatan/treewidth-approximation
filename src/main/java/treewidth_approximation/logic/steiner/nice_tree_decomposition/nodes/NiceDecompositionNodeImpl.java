@@ -66,8 +66,9 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
             ((NiceDecompositionNode)child).compute();
         }
 
+        System.out.println("Compute start for: " + getLabel());
         // now, for each SubProblem call singular calculate
-        PartitionExecutor<Integer, Boolean> partitionExecutor = new PartitionExecutor<>(new ArrayList<>(vertices), 2, vertices.size(), false, partition -> {
+        PartitionExecutor<Integer, Boolean> partitionExecutor = new PartitionExecutor<>(new ArrayList<>(vertices), 1, vertices.size(), false, partition -> {
             int amount = partition.getAmountOfSets();
             // either one of them is the set of vertices not chosen for a subtree, or all are chosen
             for (int i = 0; i<= amount; i++) {
@@ -82,6 +83,8 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
 
                 SubProblem subProblem = new SubProblem(X, subProblemPartition);
                 SubSolution subSolution = computeSingular(subProblem);
+                // if subProblem does have a terminal in X, return invalid solution
+//                System.out.println("Computing " + getLabel() + " " + subProblem);
                 solution.putSolution(subProblem, subSolution);
             }
 
@@ -89,6 +92,7 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
         });
 
         partitionExecutor.run();
+        System.out.println("Compute end for:   " + getLabel());
     }
 
     @Override
