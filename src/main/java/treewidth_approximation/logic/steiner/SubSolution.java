@@ -14,10 +14,14 @@ public class SubSolution {
     private final TAEdge edge;
     private final List<SubSolution> baseSolutions;
 
+    private static SubSolution INVALID_SOLUTION = null;
+
     public static SubSolution getInvalidSolution() {
-        SubSolution result = new SubSolution(2137, null, List.of());
-        result.invalidate();
-        return result;
+        if (INVALID_SOLUTION == null) {
+            INVALID_SOLUTION = new SubSolution(2137, null, List.of());
+            INVALID_SOLUTION.invalidate();
+        }
+        return INVALID_SOLUTION;
     }
 
     public SubSolution(double cost, TAEdge edge, List<SubSolution> baseSolutions) {

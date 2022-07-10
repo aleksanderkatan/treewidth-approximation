@@ -33,7 +33,7 @@ public class Partition<T> {
             q.add(elem);
             while (!q.isEmpty()) {
                 T current = q.remove();
-                Set<T> combined = sets.get(elements.get(current));
+                Set<T> combined = new HashSet<>(sets.get(elements.get(current)));
                 combined.addAll(other.sets.get(other.elements.get(current)));
                 for (T toVisit : combined) {
                     if (!newMap.containsKey(toVisit)) {
