@@ -1,8 +1,6 @@
 package treewidth_approximation.logic.tree_decomposition;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class TreeDecompositionImpl implements TreeDecomposition {
     private final DecompositionNode root;

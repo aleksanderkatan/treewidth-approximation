@@ -9,7 +9,6 @@ import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceDecompo
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public class IntroduceNode extends NiceDecompositionNodeImpl{

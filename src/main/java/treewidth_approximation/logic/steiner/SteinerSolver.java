@@ -1,10 +1,8 @@
 package treewidth_approximation.logic.steiner;
 
 import treewidth_approximation.logic.graph.TAEdge;
-import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceTreeDecomposition;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class SteinerSolver {

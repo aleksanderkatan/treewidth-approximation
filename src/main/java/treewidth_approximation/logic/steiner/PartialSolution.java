@@ -1,7 +1,5 @@
 package treewidth_approximation.logic.steiner;
 
-import treewidth_approximation.logic.misc.Partition;
-
 import java.util.HashMap;
 import java.util.Map;
 

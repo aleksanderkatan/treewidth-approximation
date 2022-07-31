@@ -1,23 +1,17 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition;
 
-import org.javatuples.Pair;
 import treewidth_approximation.logic.graph.TAEdge;
-import treewidth_approximation.logic.graph.TAGraph;
-import treewidth_approximation.logic.graph.TAVertex;
-import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 import treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes.*;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNodeImpl;
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 import treewidth_approximation.logic.tree_decomposition.TreeDecompositionImpl;
-import treewidth_approximation.view.PrefuseGraphShower;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class NiceTreeDecompositionGenerator {
 

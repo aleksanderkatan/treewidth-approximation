@@ -2,7 +2,6 @@ package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
 
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.misc.Partition;
-import treewidth_approximation.logic.misc.PartitionExecutor;
 import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.steiner.SubProblem;
 import treewidth_approximation.logic.steiner.SubSolution;

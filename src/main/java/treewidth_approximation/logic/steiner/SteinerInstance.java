@@ -1,6 +1,5 @@
 package treewidth_approximation.logic.steiner;
 
-import org.javatuples.Pair;
 import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.graph.TAGraph;
 

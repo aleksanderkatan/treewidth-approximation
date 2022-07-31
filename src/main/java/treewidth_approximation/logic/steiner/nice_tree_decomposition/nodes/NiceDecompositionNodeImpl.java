@@ -11,7 +11,9 @@ import treewidth_approximation.logic.steiner.SubSolution;
 import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceDecompositionNode;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode {
     protected SteinerInstance instance;

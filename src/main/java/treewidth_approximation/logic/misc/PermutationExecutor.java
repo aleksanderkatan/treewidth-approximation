@@ -1,11 +1,7 @@
 package treewidth_approximation.logic.misc;
 
-import org.javatuples.Pair;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 public class PermutationExecutor<S> {

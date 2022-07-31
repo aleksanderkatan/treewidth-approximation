@@ -2,7 +2,6 @@ package treewidth_approximation.logic.misc;
 
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
-import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 
 import java.util.Set;
 

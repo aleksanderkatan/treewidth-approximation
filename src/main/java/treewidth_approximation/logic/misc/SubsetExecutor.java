@@ -1,9 +1,9 @@
 package treewidth_approximation.logic.misc;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
-
-import static java.lang.Math.min;
 
 public class SubsetExecutor<T, S> {
     // T - partitions of this are considered

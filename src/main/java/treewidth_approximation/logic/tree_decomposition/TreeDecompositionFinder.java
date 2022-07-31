@@ -31,7 +31,7 @@ public class TreeDecompositionFinder {
         for (TAGraph subgraph : originalGraph.splitIntoConnectedComponents(false)) {
             Set<Integer> W = new HashSet<>();
             extendSet(W, subgraph.getVerticesIds(), 3*bagSize);
-            Result r = find(subgraph, W, bagSize, minWSize, 4*bagSize);
+            Result r = find(subgraph, W, actualTreeWidth);
             if (!r.successful) return r;
             root.addChild(r.decomposition.getRoot());
         }
@@ -41,7 +41,12 @@ public class TreeDecompositionFinder {
         return r;
     }
 
-    private static Result find(TAGraph graph, Set<Integer> W, int maxSeparatorSize, int minWSize, int maxBagSize) {
+    private static Result find(TAGraph graph, Set<Integer> W, int actualTreeWidth) {
+        int bagSize = actualTreeWidth+1;
+        int maxSeparatorSize = bagSize;
+        int minWSize = bagSize*3;
+        int maxBagSize = 4*bagSize;
+
         Result result = new Result();
         result.successful = false;
         result.decomposition = null;
@@ -85,7 +90,7 @@ public class TreeDecompositionFinder {
             extendSet(newW, newVertices, minWSize);
             // !!!
 
-            Result r = find(newGraph, newW, maxSeparatorSize, minWSize, maxBagSize);
+            Result r = find(newGraph, newW, actualTreeWidth);
             if (! r.successful) {
                 r.decomposition = null;
                 return r;

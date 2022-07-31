@@ -1,19 +1,13 @@
 package treewidth_approximation.logic.tree_decomposition;
 
-import org.javatuples.Pair;
-import prefuse.data.Edge;
 import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
-import treewidth_approximation.logic.misc.StringUtilities;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 
 public class TreeDecompositionVerifier {
     public static boolean verify(TreeDecomposition decomposition, TAGraph graph, int expectedBagSize, boolean verbose) {

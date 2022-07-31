@@ -1,6 +1,5 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
 
-import org.javatuples.Pair;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.misc.Partition;
 import treewidth_approximation.logic.misc.StringUtilities;

@@ -1,11 +1,9 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition;
 
-import jdk.jshell.spi.ExecutionControl;
 import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.misc.Partition;
 import treewidth_approximation.logic.steiner.SubProblem;
 import treewidth_approximation.logic.steiner.SubSolution;
-import treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes.NiceDecompositionNodeImpl;
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 
 import java.util.Map;

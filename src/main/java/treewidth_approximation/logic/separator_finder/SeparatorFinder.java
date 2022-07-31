@@ -2,12 +2,10 @@ package treewidth_approximation.logic.separator_finder;
 
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
-import treewidth_approximation.logic.misc.Partition;
 import treewidth_approximation.logic.misc.PartitionExecutor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class SeparatorFinder {
