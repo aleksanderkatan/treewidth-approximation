@@ -1,11 +1,9 @@
 package treewidth_approximation.logic.graph;
 
 import org.junit.jupiter.api.Test;
-import treewidth_approximation.logic.separator_finder.FlowNetwork;
 import treewidth_approximation.logic.separator_finder.SeparatorFinder;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SeparatorFinderTest {
     @Test
     void testNotConnected() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(10);
         g.addVertex(20);
         g.addVertex(30);
@@ -34,7 +32,7 @@ public class SeparatorFinderTest {
 
     @Test
     void testWNotConnected() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(10);
         g.addVertex(20);
         g.addVertex(30);
@@ -58,7 +56,7 @@ public class SeparatorFinderTest {
 
     @Test
     void testPath() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(10);
         g.addVertex(20);
         g.addVertex(30);

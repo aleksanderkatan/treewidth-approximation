@@ -1,7 +1,7 @@
 package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
 
 import treewidth_approximation.logic.graph.TAGraph;
-import treewidth_approximation.logic.graph.TAGraphImpl;
+import treewidth_approximation.logic.graph.TAHashGraph;
 import treewidth_approximation.logic.misc.Partition;
 import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.steiner.SubProblem;
@@ -20,7 +20,7 @@ public class LeafNode extends NiceDecompositionNodeImpl {
 
     @Override
     public void updateSubgraph(TAGraph subgraph) {
-        inducedSubgraph = new TAGraphImpl();
+        inducedSubgraph = new TAHashGraph();
         inducedSubgraph.addVertex(vertices.iterator().next());
     }
 

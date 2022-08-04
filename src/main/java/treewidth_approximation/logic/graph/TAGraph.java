@@ -8,19 +8,15 @@ public interface TAGraph {
     Set<Integer> getVerticesIds();
 
     TAVertex getVertexById(int id);
-    TAGraph copyNormalized();
-
     TAVertex addVertex(int id);
-    void removeVertex(TAVertex vertex);
-    void removeVertex(int vertexId);
+    int getVertexAmount();
 
-    void addEdge(TAVertex first, TAVertex second);
     void addEdge(int firstId, int secondId);
-    void removeEdge(TAVertex first, TAVertex second);
-    void removeEdge(int firstId, int secondId);
     boolean hasEdge(int firstId, int secondId);
+    int getEdgeAmount();
 
     TAGraph copyRestricting(Set<Integer> restricted);
     TAGraph subgraphInducedBy(Set<Integer> vertices);
     List<TAGraph> splitIntoConnectedComponents(boolean normalizeIds);
+    TAGraph copyNormalized();
 }

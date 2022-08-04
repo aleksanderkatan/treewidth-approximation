@@ -3,12 +3,12 @@ package treewidth_approximation.logic.graph;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TAVertexImpl implements TAVertex {
+public class TAHashVertex implements TAVertex {
     private final Set<TAVertex> neighbours;
     private final Set<Integer> neighboursIds;
     private final int id;
 
-    public TAVertexImpl(int id) {
+    public TAHashVertex(int id) {
         this.id = id;
         neighbours = new HashSet<>();
         neighboursIds = new HashSet<>();

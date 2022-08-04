@@ -3,11 +3,11 @@ package treewidth_approximation.logic.graph;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TAGraphImpl implements TAGraph {
+public class TAHashGraph implements TAGraph {
     // undirected graph without multi-edges or loops
     Map<Integer, TAVertex> vertices;
 
-    public TAGraphImpl() {
+    public TAHashGraph() {
         vertices = new HashMap<>();
     }
 
@@ -36,7 +36,7 @@ public class TAGraphImpl implements TAGraph {
             i++;
         }
 
-        TAGraph result = new TAGraphImpl();
+        TAGraph result = new TAHashGraph();
 
         for (TAVertex v : vertices.values()) {
             result.addVertex(map.get(v));
@@ -51,25 +51,21 @@ public class TAGraphImpl implements TAGraph {
 
     @Override
     public TAVertex addVertex(int id) {
-        TAVertex newVertex = new TAVertexImpl(id);
+        TAVertex newVertex = new TAHashVertex(id);
         vertices.put(id, newVertex);
         return newVertex;
     }
 
     @Override
-    public void removeVertex(TAVertex vertex) {
-        vertices.remove(vertex.getId());
-        Set<TAVertex> neighbours = new HashSet<>(vertex.getNeighbours());
-        for (TAVertex neighbour : neighbours) removeEdge(vertex, neighbour);
+    public int getVertexAmount() {
+        return getVertices().size();
     }
 
     @Override
-    public void removeVertex(int vertexId) {
-        vertices.remove(vertexId);
-    }
+    public void addEdge(int firstId, int secondId) {
+        TAVertex first = getVertexById(firstId);
+        TAVertex second = getVertexById(secondId);
 
-    @Override
-    public void addEdge(TAVertex first, TAVertex second) {
         if (first == second) return;
         if (first == null || second == null) return;
         if (vertices.get(first.getId()) == null || vertices.get(second.getId()) == null) return;
@@ -79,24 +75,18 @@ public class TAGraphImpl implements TAGraph {
     }
 
     @Override
-    public void addEdge(int firstId, int secondId) {
-        addEdge(vertices.get(firstId), vertices.get(secondId));
-    }
-
-    @Override
-    public void removeEdge(TAVertex first, TAVertex second) {
-        first.removeNeighbour(second);
-        second.removeNeighbour(first);
-    }
-
-    @Override
-    public void removeEdge(int firstId, int secondId) {
-        removeEdge(vertices.get(firstId), vertices.get(secondId));
-    }
-
-    @Override
     public boolean hasEdge(int firstId, int secondId) {
         return vertices.get(firstId).getNeighboursIds().contains(secondId);
+    }
+
+    @Override
+    public int getEdgeAmount() {
+        // could be optimized
+        int total = 0;
+        for (TAVertex vertex : getVertices()) {
+            total += vertex.getNeighbours().size();
+        }
+        return total/2;
     }
 
     @Override
@@ -104,28 +94,11 @@ public class TAGraphImpl implements TAGraph {
         Set<Integer> retained = new HashSet<>(vertices.keySet());
         retained.removeAll(restricted);
         return subgraphInducedBy(retained);
-//        TAGraph result = new TAGraphImpl();
-//        List<TAVertex> originalVertices = new ArrayList<>(getVertices());
-//
-//        for (TAVertex v : originalVertices) {
-//            if (restricted.contains(v.getId())) continue;
-//            result.addVertex(v.getId());
-//        }
-//
-//        for (TAVertex v : originalVertices) {
-//            if (restricted.contains(v.getId())) continue;
-//            for (TAVertex n : v.getNeighbours()) {
-//                if (restricted.contains(n.getId())) continue;
-//                result.addEdge(v.getId(), n.getId());
-//            }
-//        }
-//
-//        return result;
     }
 
     @Override
     public TAGraph subgraphInducedBy(Set<Integer> vertices) {
-        TAGraph result = new TAGraphImpl();
+        TAGraph result = new TAHashGraph();
 
         for (Integer v : vertices) {
             result.addVertex(v);
@@ -161,7 +134,7 @@ public class TAGraphImpl implements TAGraph {
         }
 
         List<TAGraph> components = new ArrayList<>();
-        for (int i = 0; i< index; i++) components.add(new TAGraphImpl());
+        for (int i = 0; i< index; i++) components.add(new TAHashGraph());
         for (var k : vertexComponents.entrySet()) {
             components.get(k.getValue()).addVertex(k.getKey());
         }

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TAGraphTest {
     @Test
     void testVertexAddition() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
 
         g.addVertex(11);
         g.addVertex(13);
@@ -15,17 +15,22 @@ public class TAGraphTest {
         assertNotNull(g.getVertexById(11));
         assertNotNull(g.getVertexById(13));
         assertNull(g.getVertexById(12));
+        assertEquals(2, g.getVertexAmount());
     }
 
     @Test
-    void testVertexRemoval() {
-        TAGraph g = new TAGraphImpl();
-        g.addVertex(11);
-        TAVertex removed = g.addVertex(13);
+    void testEdgeAddition() {
+        TAGraph g = new TAHashGraph();
+        g.addVertex(2);
+        g.addVertex(1);
+        g.addVertex(3);
 
-        g.removeVertex(removed);
+        g.addEdge(2, 1);
+        g.addEdge(2, 3);
 
-        assertNotNull(g.getVertexById(11));
-        assertNull(g.getVertexById(13));
+        assertTrue(g.hasEdge(1, 2));
+        assertTrue(g.hasEdge(2, 3));
+        assertFalse(g.hasEdge(1, 3));
+        assertEquals(2, g.getEdgeAmount());
     }
 }

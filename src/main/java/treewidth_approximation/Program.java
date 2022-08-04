@@ -19,18 +19,18 @@ import java.util.stream.Collectors;
 
 public class Program {
     public static void main(String[] args) {
-        int expectedTreeWidth = 5;
+        int expectedTreeWidth = 1;
 //        int vertices = 200;
 //        double edgeChance = 2.05/vertices;
-//        int terminalsAmount = 15;
+        int terminalsAmount = 15;
 
         RandomGraphProvider provider = new RandomGraphProviderImpl(new Random(67));
 
         TAGraph g = provider.getGridSubgraph(expectedTreeWidth, 20, 0.94);
         g = g.splitIntoConnectedComponents(true).get(0);
-//        Set<Integer> terminals = provider.getRandomVertexSubset(g, terminalsAmount).stream().map(TAVertex::getId).collect(Collectors.toSet());
+        Set<Integer> terminals = provider.getRandomVertexSubset(g, terminalsAmount).stream().map(TAVertex::getId).collect(Collectors.toSet());
 
-//        SteinerInstance steiner = new SteinerInstance(g, terminals, new HashMap<>());
+        SteinerInstance steiner = new SteinerInstance(g, terminals, new HashMap<>());
 
 //        PrefuseGraphShower.showSteinerInstance(steiner, "Steiner instance");
         TreeDecompositionFinder.Result r = TreeDecompositionFinder.findDecomposition(g, expectedTreeWidth);
@@ -42,13 +42,13 @@ public class Program {
         PrefuseGraphShower.showGraphWithIds(g, Set.of(), "Graph");
         PrefuseGraphShower.showTreeDecomposition(r.decomposition, "Valid decomposition");
 
-//        NiceTreeDecomposition niceDecomposition = NiceTreeDecompositionGenerator.generate(r.decomposition, steiner);
-//        TreeDecompositionVerifier.verify(niceDecomposition, g, 4 * (expectedTreeWidth + 1), true);
+        NiceTreeDecomposition niceDecomposition = NiceTreeDecompositionGenerator.generate(r.decomposition, steiner);
+        TreeDecompositionVerifier.verify(niceDecomposition, g, 4 * (expectedTreeWidth + 1), true);
 //        PrefuseGraphShower.showTreeDecomposition(niceDecomposition, "Nice decomposition");
 
-//        SteinerSolver solver = new SteinerSolver(steiner, niceDecomposition);
-//        SteinerInstance solved = solver.solve();
+        SteinerSolver solver = new SteinerSolver(steiner, niceDecomposition);
+        SteinerInstance solved = solver.solve();
 
-//        PrefuseGraphShower.showSteinerInstance(solved, "Solved Steiner");
+        PrefuseGraphShower.showSteinerInstance(solved, "Solved Steiner");
     }
 }

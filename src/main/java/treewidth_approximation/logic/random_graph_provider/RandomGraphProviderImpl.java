@@ -1,7 +1,7 @@
 package treewidth_approximation.logic.random_graph_provider;
 
 import treewidth_approximation.logic.graph.TAGraph;
-import treewidth_approximation.logic.graph.TAGraphImpl;
+import treewidth_approximation.logic.graph.TAHashGraph;
 import treewidth_approximation.logic.graph.TAVertex;
 
 import java.util.*;
@@ -15,7 +15,7 @@ public class RandomGraphProviderImpl implements RandomGraphProvider {
 
     @Override
     public TAGraph getRandom(int vertices, double edgeChance) {
-        TAGraph graph = new TAGraphImpl();
+        TAGraph graph = new TAHashGraph();
         for (int i = 0; i< vertices; i++) graph.addVertex(i);
         for (int i = 0; i< vertices; i++) {
             for (int j = i+1; j< vertices; j++) {
@@ -29,7 +29,7 @@ public class RandomGraphProviderImpl implements RandomGraphProvider {
 
     @Override
     public TAGraph getGridSubgraph(int x, int y, double edgeChance) {
-        TAGraph graph = new TAGraphImpl();
+        TAGraph graph = new TAHashGraph();
         for (int i = 0; i< x*y; i++) graph.addVertex(i);
         // horizontal
         for (int i = 0; i< x-1; i++) {

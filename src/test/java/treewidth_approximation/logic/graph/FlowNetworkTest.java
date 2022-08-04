@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FlowNetworkTest {
     @Test
     void testNotConnected() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(10);
         g.addVertex(20);
         g.addVertex(30);
@@ -33,7 +33,7 @@ public class FlowNetworkTest {
 
     @Test
     void testPath() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(30);
         g.addVertex(20);
         g.addVertex(10);
@@ -56,7 +56,7 @@ public class FlowNetworkTest {
 
     @Test
     void testDoublePath() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -82,7 +82,7 @@ public class FlowNetworkTest {
 
     @Test
     void testDoubleDisjointPaths() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -112,7 +112,7 @@ public class FlowNetworkTest {
 
     @Test
     void testRequireAlternation() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -143,7 +143,7 @@ public class FlowNetworkTest {
 
     @Test
     void testMultipleVertices() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -181,7 +181,7 @@ public class FlowNetworkTest {
 
     @Test
     void testExceedingLimit() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -211,7 +211,7 @@ public class FlowNetworkTest {
 
     @Test
     void testSeparatorThrows() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -232,7 +232,7 @@ public class FlowNetworkTest {
 
     @Test
     void testSeparatorPath() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
@@ -257,7 +257,7 @@ public class FlowNetworkTest {
 
     @Test
     void testSeparatorMultipleVertices() {
-        TAGraph g = new TAGraphImpl();
+        TAGraph g = new TAHashGraph();
         g.addVertex(1);
         g.addVertex(2);
         g.addVertex(3);
