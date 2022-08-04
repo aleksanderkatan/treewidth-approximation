@@ -1,54 +1,69 @@
 package treewidth_approximation;
 
 import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.graph.TAHashGraph;
 import treewidth_approximation.logic.graph.TAVertex;
+import treewidth_approximation.logic.graph.graph_serialization.GraphScanner;
+import treewidth_approximation.logic.graph.graph_serialization.GraphWriter;
 import treewidth_approximation.logic.random_graph_provider.RandomGraphProvider;
 import treewidth_approximation.logic.random_graph_provider.RandomGraphProviderImpl;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 import treewidth_approximation.logic.steiner.SteinerSolver;
-import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceTreeDecomposition;
-import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceTreeDecompositionGenerator;
+import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.NiceTreeDecomposition;
+import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.NiceTreeDecompositionGenerator;
+import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 import treewidth_approximation.logic.tree_decomposition.TreeDecompositionFinder;
 import treewidth_approximation.logic.tree_decomposition.TreeDecompositionVerifier;
 import treewidth_approximation.view.PrefuseGraphShower;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Program {
-    public static void main(String[] args) {
-        int expectedTreeWidth = 1;
-//        int vertices = 200;
-//        double edgeChance = 2.05/vertices;
-        int terminalsAmount = 15;
+    public static void main(String[] args) throws IOException {
+        // read problem instance from file provided as first argument
+        String inputPath = args[0];
+        String outputPath = args[1];
+        String instanceString = new Scanner(new File(inputPath)).useDelimiter("\\Z").next();
+        SteinerInstance instance = GraphScanner.scanSteinerInstance(instanceString, TAHashGraph::new);
 
-        RandomGraphProvider provider = new RandomGraphProviderImpl(new Random(67));
+        // assert graph is a single connected component
+        assert instance.getGraph().splitIntoConnectedComponents(false).size() == 1;
 
-        TAGraph g = provider.getGridSubgraph(expectedTreeWidth, 20, 0.94);
-        g = g.splitIntoConnectedComponents(true).get(0);
-        Set<Integer> terminals = provider.getRandomVertexSubset(g, terminalsAmount).stream().map(TAVertex::getId).collect(Collectors.toSet());
+        for (int i = 1; i<= 5; i++) {
+            // attempt to find tree-decomposition of width 4*i+3
+            TreeDecompositionFinder.Result r = TreeDecompositionFinder
+                    .findDecomposition(instance.getGraph(), i);
 
-        SteinerInstance steiner = new SteinerInstance(g, terminals, new HashMap<>());
+            if (!r.successful) {
+                // tree-width greater than i, try again with bigger i
+                // r.setWithoutSeparator - set without balanced separator of order i+1
+                continue;
+            }
+            TreeDecomposition decomposition = r.decomposition;
+            // verify, that resulting decomposition is correct
+            assert TreeDecompositionVerifier.verify(decomposition, instance.getGraph(), i*4+3, true);
 
-//        PrefuseGraphShower.showSteinerInstance(steiner, "Steiner instance");
-        TreeDecompositionFinder.Result r = TreeDecompositionFinder.findDecomposition(g, expectedTreeWidth);
-        if (!r.successful) {
-            System.out.println("Unsuccessful call.");
-            return;
+            // generate niceDecomposition from decomposition and solve
+            NiceTreeDecomposition niceDecomposition = NiceTreeDecompositionGenerator.generate(r.decomposition, instance);
+            SteinerSolver.solve(instance, niceDecomposition);
+
+            // show results
+            PrefuseGraphShower.showTreeDecomposition(niceDecomposition, "Extended nice decomposition");
+            PrefuseGraphShower.showSteinerInstance(instance, "Solved Steiner Instance");
+
+            // save results
+            FileWriter output = new FileWriter(outputPath);
+            output.write(GraphWriter.writeSteinerInstance(instance));
+            output.close();
+            break;
         }
-        TreeDecompositionVerifier.verify(r.decomposition, g, expectedTreeWidth*4+3, true);
-        PrefuseGraphShower.showGraphWithIds(g, Set.of(), "Graph");
-        PrefuseGraphShower.showTreeDecomposition(r.decomposition, "Valid decomposition");
-
-        NiceTreeDecomposition niceDecomposition = NiceTreeDecompositionGenerator.generate(r.decomposition, steiner);
-        TreeDecompositionVerifier.verify(niceDecomposition, g, 4 * (expectedTreeWidth + 1), true);
-//        PrefuseGraphShower.showTreeDecomposition(niceDecomposition, "Nice decomposition");
-
-        SteinerSolver solver = new SteinerSolver(steiner, niceDecomposition);
-        SteinerInstance solved = solver.solve();
-
-        PrefuseGraphShower.showSteinerInstance(solved, "Solved Steiner");
     }
 }

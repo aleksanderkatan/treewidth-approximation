@@ -1,4 +1,4 @@
-package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
+package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes;
 
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.misc.Partition;
@@ -8,7 +8,7 @@ import treewidth_approximation.logic.steiner.PartialSolution;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 import treewidth_approximation.logic.steiner.SubProblem;
 import treewidth_approximation.logic.steiner.SubSolution;
-import treewidth_approximation.logic.steiner.nice_tree_decomposition.NiceDecompositionNode;
+import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.NiceDecompositionNode;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 
 import java.util.ArrayList;

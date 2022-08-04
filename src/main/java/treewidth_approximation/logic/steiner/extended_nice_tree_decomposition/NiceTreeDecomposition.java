@@ -1,4 +1,4 @@
-package treewidth_approximation.logic.steiner.nice_tree_decomposition;
+package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition;
 
 import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.misc.Partition;
@@ -31,7 +31,8 @@ public class NiceTreeDecomposition implements TreeDecomposition {
         SubProblem subProblem = new SubProblem(Set.of(), p);
         SubSolution subSolution = getRoot().getSolutions().getSolution(subProblem);
         if (!subSolution.isValid()) {
-            System.out.println("ERROR: SubSolution in root invalid!!");
+            // should never happen, every connected graph has a spanning tree
+            throw new RuntimeException("SubSolution in root invalid!!");
         }
         return subSolution.collectEdges();
     }

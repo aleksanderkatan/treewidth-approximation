@@ -1,8 +1,8 @@
-package treewidth_approximation.logic.steiner.nice_tree_decomposition;
+package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition;
 
 import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.steiner.SteinerInstance;
-import treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes.*;
+import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes.*;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNodeImpl;
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;

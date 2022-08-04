@@ -1,4 +1,4 @@
-package treewidth_approximation.logic.steiner.nice_tree_decomposition.nodes;
+package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes;
 
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAHashGraph;

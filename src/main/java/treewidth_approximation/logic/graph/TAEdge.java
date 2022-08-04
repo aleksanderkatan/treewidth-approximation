@@ -5,7 +5,7 @@ import java.util.Objects;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class TAEdge {
+public class TAEdge implements Comparable<TAEdge> {
     private final int u;
     private final int v;
 
@@ -23,6 +23,14 @@ public class TAEdge {
         if (o == null || getClass() != o.getClass()) return false;
         TAEdge edge = (TAEdge) o;
         return u == edge.u && v == edge.v;
+    }
+
+    @Override
+    public int compareTo(TAEdge o) {
+        if (getFirst() != o.getFirst()) {
+            return getFirst() - o.getFirst();
+        }
+        return getSecond() - o.getSecond();
     }
 
     @Override
