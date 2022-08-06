@@ -94,14 +94,12 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
         });
 
         partitionExecutor.run();
-        // grand child solutions are no longer needed
+        // grandchild solutions are no longer needed
         for (DecompositionNode child : children) {
             for (DecompositionNode grandChild : child.getChildren()) {
                 ((NiceDecompositionNode)grandChild).getSolutions().dispose();
             }
         }
-
-        System.out.println("Compute end for:   " + getLabel());
     }
 
     @Override

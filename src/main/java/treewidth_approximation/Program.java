@@ -1,12 +1,9 @@
 package treewidth_approximation;
 
-import treewidth_approximation.logic.graph.TAGraph;
+import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.graph.TAHashGraph;
-import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.graph.graph_serialization.GraphScanner;
 import treewidth_approximation.logic.graph.graph_serialization.GraphWriter;
-import treewidth_approximation.logic.random_graph_provider.RandomGraphProvider;
-import treewidth_approximation.logic.random_graph_provider.RandomGraphProviderImpl;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 import treewidth_approximation.logic.steiner.SteinerSolver;
 import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.NiceTreeDecomposition;
@@ -17,14 +14,11 @@ import treewidth_approximation.logic.tree_decomposition.TreeDecompositionVerifie
 import treewidth_approximation.view.PrefuseGraphShower;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Program {
     public static void main(String[] args) throws IOException {
@@ -48,20 +42,21 @@ public class Program {
                 continue;
             }
             TreeDecomposition decomposition = r.decomposition;
-            // verify, that resulting decomposition is correct
+            // verify, that resulting decomposition is in fact correct
             assert TreeDecompositionVerifier.verify(decomposition, instance.getGraph(), i*4+3, true);
 
             // generate niceDecomposition from decomposition and solve
             NiceTreeDecomposition niceDecomposition = NiceTreeDecompositionGenerator.generate(r.decomposition, instance);
             SteinerSolver.solve(instance, niceDecomposition);
 
-            // show results
+            // show result
             PrefuseGraphShower.showTreeDecomposition(niceDecomposition, "Extended nice decomposition");
             PrefuseGraphShower.showSteinerInstance(instance, "Solved Steiner Instance");
 
-            // save results
+            // save result
+            List<TAEdge> resultEdges = new ArrayList<>(instance.getSelected());
             FileWriter output = new FileWriter(outputPath);
-            output.write(GraphWriter.writeSteinerInstance(instance));
+            output.write(GraphWriter.writeEdgeList(resultEdges));
             output.close();
             break;
         }

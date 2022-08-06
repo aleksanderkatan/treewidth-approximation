@@ -1,14 +1,14 @@
 package treewidth_approximation.logic.graph;
 
 import org.junit.jupiter.api.Test;
-import treewidth_approximation.logic.graph.graph_serialization.GraphScanner;
 import treewidth_approximation.logic.graph.graph_serialization.GraphWriter;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GraphWritterTest {
     @Test
@@ -17,65 +17,60 @@ public class GraphWritterTest {
 
         String graphString = GraphWriter.writeGraph(graph);
 
-        assertEquals("0\n0\n", graphString);
+        assertEquals("0 0\n", graphString);
     }
 
     @Test
     public void testGraphOnlyVertices() {
         TAGraph graph = new TAHashGraph();
+        graph.addVertex(1);
+        graph.addVertex(0);
         graph.addVertex(2);
-        graph.addVertex(3);
-        graph.addVertex(4);
 
         String graphString = GraphWriter.writeGraph(graph);
 
-        assertEquals("3\n2\n3\n4\n0\n", graphString);
+        assertEquals("3 0\n", graphString);
     }
 
     @Test
     public void testGraphVerticesAndEdges() {
         TAGraph graph = new TAHashGraph();
+        graph.addVertex(1);
+        graph.addVertex(0);
         graph.addVertex(2);
-        graph.addVertex(3);
-        graph.addVertex(4);
-        graph.addEdge(3, 2);
-        graph.addEdge(3, 4);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 0);
 
         String graphString = GraphWriter.writeGraph(graph);
 
-        assertEquals("3\n2\n3\n4\n2\n2 3\n3 4\n", graphString);
+        assertEquals("3 2\n0 1\n1 2\n", graphString);
     }
 
     @Test
-    public void testSteinerInstanceNoSelected() {
+    public void testSteinerInstance() {
         TAGraph graph = new TAHashGraph();
+        graph.addVertex(1);
+        graph.addVertex(0);
         graph.addVertex(2);
-        graph.addVertex(3);
-        graph.addVertex(4);
-        graph.addEdge(3, 2);
-        graph.addEdge(3, 4);
-        Set<Integer> terminals = Set.of(2, 4);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 0);
+        Set<Integer> terminals = Set.of(0, 2);
         SteinerInstance instance = new SteinerInstance(graph, terminals, new HashMap<>());
 
         String instanceString = GraphWriter.writeSteinerInstance(instance);
 
-        assertEquals("3\n2\n3\n4\n2\n2 3\n3 4\n2\n2\n4\n", instanceString);
+        assertEquals("3 2\n0 1\n1 2\n2\n0\n2\n", instanceString);
     }
 
     @Test
-    public void testSteinerInstanceWithSelected() {
-        TAGraph graph = new TAHashGraph();
-        graph.addVertex(2);
-        graph.addVertex(3);
-        graph.addVertex(4);
-        graph.addEdge(3, 2);
-        graph.addEdge(3, 4);
-        Set<Integer> terminals = Set.of(2, 4);
-        SteinerInstance instance = new SteinerInstance(graph, terminals, new HashMap<>());
-        instance.setSelected(Set.of(new TAEdge(2, 3)));
+    public void testEdgeList() {
+        List<TAEdge> edges = List.of(
+                new TAEdge(1, 2),
+                new TAEdge(0, 2)
+        );
 
-        String instanceString = GraphWriter.writeSteinerInstance(instance);
+        String result = GraphWriter.writeEdgeList(edges);
 
-        assertEquals("3\n2\n3\n4\n2\n2 3\n3 4\n2\n2\n4\n1\n2 3\n", instanceString);
+        assertEquals("2\n1 2\n0 2\n", result);
     }
 }

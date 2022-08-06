@@ -6,8 +6,6 @@ import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 
 import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class GraphWriter {
@@ -17,7 +15,7 @@ public class GraphWriter {
         int vertices = graph.getVertexAmount();
         int edges = graph.getEdgeAmount();
 
-        result.append(vertices).append("\n");
+        result.append(vertices).append(" ").append(edges).append("\n");
 
         List<Integer> sortedVertices = graph
                 .getVertices()
@@ -25,11 +23,7 @@ public class GraphWriter {
                 .map(TAVertex::getId)
                 .sorted()
                 .collect(Collectors.toList());
-        for (Integer v : sortedVertices) {
-            result.append(v).append("\n");
-        }
 
-        result.append(edges).append("\n");
         for (Integer v : sortedVertices) {
             List<Integer> sortedNeighbours = graph
                     .getVertexById(v)
@@ -63,14 +57,18 @@ public class GraphWriter {
             result.append(v).append("\n");
         }
 
-        List<TAEdge> selected = instance.getSelected().stream().sorted().collect(Collectors.toList());
-        if (selected.size() > 0) {
-            result.append(selected.size()).append("\n");
-            for (TAEdge edge : selected) {
-                result.append(edge.getFirst()).append(" ").append(edge.getSecond()).append("\n");
-            }
+        return graph + new String(result);
+    }
+
+    public static String writeEdgeList(List<TAEdge> edges) {
+        StringBuilder result = new StringBuilder();
+
+        result.append(edges.size()).append("\n");
+
+        for (TAEdge edge : edges) {
+            result.append(edge.getFirst()).append(" ").append(edge.getSecond()).append("\n");
         }
 
-        return graph + new String(result);
+        return new String(result);
     }
 }

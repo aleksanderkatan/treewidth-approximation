@@ -30,6 +30,12 @@ import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Due to technical limitations, all graphs must be normalized before showing
+ * (vertices' ids should be in range from 0 to vertices_amount-1)
+ * Furthermore, if all edges of vertices would be of the same color,
+ * No matter the color the outcome will default to one static color.
+ */
 public class PrefuseGraphShower {
     public static void showSteinerInstance(SteinerInstance instance, String title) {
         Graph graph = SteinerInstanceConverter.convert(instance);
