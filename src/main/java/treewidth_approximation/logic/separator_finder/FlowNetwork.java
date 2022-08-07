@@ -3,10 +3,17 @@ package treewidth_approximation.logic.separator_finder;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAVertex;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 public class FlowNetwork {
-    private static final Integer INFINITY = 1<<30;
+    private static final Integer INFINITY = 1 << 30;
+
     private static class Edge {
         Integer source;
         Integer target;
@@ -31,7 +38,8 @@ public class FlowNetwork {
         }
     }
 
-    public static class FlowNotMaximalException extends RuntimeException {}
+    public static class FlowNotMaximalException extends RuntimeException {
+    }
 
     private final List<Vertex> vertices; // [0] - source, [1] - target
     private List<Integer> separatorIds;
@@ -50,13 +58,13 @@ public class FlowNetwork {
 
         // add vertices, source-in, in-out, out-target edges
         List<TAVertex> originalVertices = new ArrayList<>(graph.getVertices());
-        for (int i = 0; i< originalVertices.size(); i++) {
+        for (int i = 0; i < originalVertices.size(); i++) {
             TAVertex v = originalVertices.get(i);
             Vertex in = new Vertex(v.getId());
-            int indexIn = 2+2*i;
+            int indexIn = 2 + 2 * i;
             idToIndex.put(v.getId(), indexIn);
             Vertex out = new Vertex(v.getId());
-            int indexOut = 2+2*i+1;
+            int indexOut = 2 + 2 * i + 1;
 
             int betweenCapacity = 1;
 
@@ -84,12 +92,12 @@ public class FlowNetwork {
         // add remaining edges
         for (TAVertex v : originalVertices) {
             for (TAVertex n : v.getNeighbours()) {
-                if (n.getId() < v.getId()) continue;
+                if (n.getId() < v.getId()) {continue;}
 
                 int inIndexV = idToIndex.get(v.getId());
-                int outIndexV = inIndexV+1;
+                int outIndexV = inIndexV + 1;
                 int inIndexN = idToIndex.get(n.getId());
-                int outIndexN = inIndexN+1;
+                int outIndexN = inIndexN + 1;
 
                 Vertex inV = vertices.get(inIndexV);
                 Vertex outV = vertices.get(outIndexV);
@@ -109,7 +117,7 @@ public class FlowNetwork {
 
     private List<Edge> BFS() {
         List<Edge> edgeThatGotToVertex = new ArrayList<>();
-        for (int i = 0; i< vertices.size(); i++) edgeThatGotToVertex.add(null);
+        for (int i = 0; i < vertices.size(); i++) {edgeThatGotToVertex.add(null);}
 
         Queue<Integer> q = new LinkedList<>();
         q.add(0);
@@ -136,8 +144,8 @@ public class FlowNetwork {
 
         if (edgeThatGotToVertex.get(1) == null) { // max flow = min cut
             separatorIds = new ArrayList<>();
-            for (int i = 2; i< vertices.size(); i+=2) {
-                if (edgeThatGotToVertex.get(i) != null && edgeThatGotToVertex.get(i+1) == null) {
+            for (int i = 2; i < vertices.size(); i += 2) {
+                if (edgeThatGotToVertex.get(i) != null && edgeThatGotToVertex.get(i + 1) == null) {
                     separatorIds.add(vertices.get(i).id);
                 }
             }
@@ -150,7 +158,8 @@ public class FlowNetwork {
             if (e.target == current) {
                 e.flow += 1;
                 current = e.source;
-            } else {
+            }
+            else {
                 e.flow -= 1;
                 current = e.target;
             }
@@ -160,19 +169,19 @@ public class FlowNetwork {
 
     public int increaseCurrentFlow(int incrementLimit) {
         int result = 0;
-        for (int i = 0; i< incrementLimit; i++) {
+        for (int i = 0; i < incrementLimit; i++) {
             boolean succeeded = increaseFlowByOne();
             if (!succeeded) {
                 break;
             }
-            result = i+1;
+            result = i + 1;
         }
 
         return result;
     }
 
     public List<Integer> getSeparatorIds() throws FlowNotMaximalException {
-        if (separatorIds == null) throw new FlowNotMaximalException();
+        if (separatorIds == null) {throw new FlowNotMaximalException();}
         return separatorIds;
     }
 }

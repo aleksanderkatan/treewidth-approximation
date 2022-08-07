@@ -30,14 +30,10 @@ public class SubSolution {
         this.baseSolutions = baseSolutions;
     }
 
-    public void invalidate() { this.valid = false; }
+    public void invalidate() {this.valid = false;}
 
     public boolean isValid() {
         return valid;
-    }
-
-    public TAEdge getEdge() {
-        return edge;
     }
 
     public Set<TAEdge> collectEdges() {
@@ -49,10 +45,6 @@ public class SubSolution {
             result.add(edge);
         }
         return result;
-    }
-
-    public List<SubSolution> getBaseSolutions() {
-        return baseSolutions;
     }
 
     public double getCost() {

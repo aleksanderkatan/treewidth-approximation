@@ -19,20 +19,19 @@ public class TreeDecompositionFinder {
     }
 
     /**
-     *  either finds a tree decomposition of treewidth at most 4*actualTreeWidth+3,
-     *  or proves that tree-width is bigger than actualTreeWidth
-     *  by returning a set of size 3*(actualTreeWidth+1) that doesn't have a balanced separator of size actualTreeWidth+1
+     * either finds a tree decomposition of treewidth at most 4*actualTreeWidth+3,
+     * or proves that tree-width is bigger than actualTreeWidth
+     * by returning a set of size 3*(actualTreeWidth+1) that doesn't have a balanced separator of size actualTreeWidth+1
      */
     public static Result findDecomposition(TAGraph originalGraph, int actualTreeWidth) {
-        int bagSize = actualTreeWidth+1;
-        int minWSize = bagSize*3; // could possibly be bagSize+1, but still may grow in sub-problems up to 3*bagSize
+        int bagSize = actualTreeWidth + 1;
         DecompositionNode root = new DecompositionNodeImpl(new HashSet<>());
 
         for (TAGraph subgraph : originalGraph.splitIntoConnectedComponents(false)) {
             Set<Integer> W = new HashSet<>();
-            extendSet(W, subgraph.getVerticesIds(), 3*bagSize);
+            extendSet(W, subgraph.getVerticesIds(), 3 * bagSize);
             Result r = find(subgraph, W, actualTreeWidth);
-            if (!r.successful) return r;
+            if (!r.successful) {return r;}
             root.addChild(r.decomposition.getRoot());
         }
         Result r = new Result();
@@ -42,10 +41,10 @@ public class TreeDecompositionFinder {
     }
 
     private static Result find(TAGraph graph, Set<Integer> W, int actualTreeWidth) {
-        int bagSize = actualTreeWidth+1;
+        int bagSize = actualTreeWidth + 1;
         int maxSeparatorSize = bagSize;
-        int minWSize = bagSize*3;
-        int maxBagSize = 4*bagSize;
+        int minWSize = bagSize * 3; // could possibly be bagSize+1, but still may grow in sub-problems up to 3*bagSize
+        int maxBagSize = 4 * bagSize;
 
         Result result = new Result();
         result.successful = false;
@@ -65,7 +64,8 @@ public class TreeDecompositionFinder {
         Set<Integer> separator;
         try {
             separator = SeparatorFinder.findSeparatorIds(graph, W, maxSeparatorSize);
-        } catch (SeparatorFinder.NoSeparatorExistsException e) {
+        }
+        catch (SeparatorFinder.NoSeparatorExistsException e) {
             // if no separator exists, in the entire graph it will also not exist
             result.setWithoutSeparator = new HashSet<>(W);
             return result;
@@ -85,13 +85,13 @@ public class TreeDecompositionFinder {
             newW.addAll(separator);
 
             // !!!
-            // increase newW so it has right size
+            // increase newW, so it has right size
             // if there is not enough vertices, next step will return a single node anyway
             extendSet(newW, newVertices, minWSize);
             // !!!
 
             Result r = find(newGraph, newW, actualTreeWidth);
-            if (! r.successful) {
+            if (!r.successful) {
                 r.decomposition = null;
                 return r;
             }

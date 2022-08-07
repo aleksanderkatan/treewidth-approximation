@@ -1,7 +1,7 @@
 package treewidth_approximation.logic.graph;
 
 import org.junit.jupiter.api.Test;
-import treewidth_approximation.logic.graph.graph_serialization.GraphWriter;
+import treewidth_approximation.logic.misc.serialization.StringWriter;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class GraphWritterTest {
     public void testEmptyGraph() {
         TAGraph graph = new TAHashGraph();
 
-        String graphString = GraphWriter.writeGraph(graph);
+        String graphString = StringWriter.writeGraph(graph);
 
         assertEquals("0 0\n", graphString);
     }
@@ -27,7 +27,7 @@ public class GraphWritterTest {
         graph.addVertex(0);
         graph.addVertex(2);
 
-        String graphString = GraphWriter.writeGraph(graph);
+        String graphString = StringWriter.writeGraph(graph);
 
         assertEquals("3 0\n", graphString);
     }
@@ -41,7 +41,7 @@ public class GraphWritterTest {
         graph.addEdge(1, 2);
         graph.addEdge(1, 0);
 
-        String graphString = GraphWriter.writeGraph(graph);
+        String graphString = StringWriter.writeGraph(graph);
 
         assertEquals("3 2\n0 1\n1 2\n", graphString);
     }
@@ -57,7 +57,7 @@ public class GraphWritterTest {
         Set<Integer> terminals = Set.of(0, 2);
         SteinerInstance instance = new SteinerInstance(graph, terminals, new HashMap<>());
 
-        String instanceString = GraphWriter.writeSteinerInstance(instance);
+        String instanceString = StringWriter.writeSteinerInstance(instance);
 
         assertEquals("3 2\n0 1\n1 2\n2\n0\n2\n", instanceString);
     }
@@ -69,7 +69,7 @@ public class GraphWritterTest {
                 new TAEdge(0, 2)
         );
 
-        String result = GraphWriter.writeEdgeList(edges);
+        String result = StringWriter.writeEdgeList(edges);
 
         assertEquals("2\n1 2\n0 2\n", result);
     }

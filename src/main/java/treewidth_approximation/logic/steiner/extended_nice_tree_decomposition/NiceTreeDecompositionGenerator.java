@@ -2,7 +2,11 @@ package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition;
 
 import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.steiner.SteinerInstance;
-import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes.*;
+import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes.ForgetNode;
+import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes.IntroduceEdgeNode;
+import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes.IntroduceNode;
+import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes.JoinNode;
+import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes.LeafNode;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNodeImpl;
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
@@ -18,9 +22,6 @@ public class NiceTreeDecompositionGenerator {
     public static NiceTreeDecomposition generate(TreeDecomposition decomposition, SteinerInstance steiner) {
         TreeDecomposition copy = decomposition.copy();
         int U = steiner.getTerminals().iterator().next();
-
-//        // remove U from every node so that it will not be introduced anywhere
-//        removeVertex(copy.getRoot(), U);
 
         // make it so there is a right amount of nodes
         collapse(copy.getRoot());
@@ -100,7 +101,8 @@ public class NiceTreeDecompositionGenerator {
     private static void addLeaves(DecompositionNode node) {
         if (node.getChildren().size() == 0) {
             node.addChild(new DecompositionNodeImpl(new HashSet<>()));
-        } else {
+        }
+        else {
             for (DecompositionNode child : node.getChildren()) {
                 addLeaves(child);
             }
@@ -171,12 +173,13 @@ public class NiceTreeDecompositionGenerator {
                 int introduced = onlyInNode.iterator().next();
                 result = new IntroduceNode(node.getVertices(), introduced);
                 result.addChild(niceChild);
-            } else {
+            }
+            else {
                 // forget
                 int forgotten = onlyInChild.iterator().next();
                 result = new ForgetNode(node.getVertices(), forgotten);
 
-//                // introduce all the edges before forgetting
+                //                // introduce all the edges before forgetting
                 NiceDecompositionNode current = result;
                 for (int vertex : childBag) {
                     if (steiner.getGraph().hasEdge(forgotten, vertex)) {
@@ -210,13 +213,14 @@ public class NiceTreeDecompositionGenerator {
 
     private static void fillMissing(NiceDecompositionNode node, SteinerInstance instance) {
         for (DecompositionNode child : node.getChildren()) {
-            fillMissing((NiceDecompositionNode)child, instance);
+            fillMissing((NiceDecompositionNode) child, instance);
         }
         node.setInstance(instance);
         if (node.getChildren().size() == 0) {
             node.updateSubgraph(null);
-        } else {
-            node.updateSubgraph(((NiceDecompositionNode)node.getChildren().iterator().next()).getSubgraph());
+        }
+        else {
+            node.updateSubgraph(((NiceDecompositionNode) node.getChildren().iterator().next()).getSubgraph());
         }
     }
 }

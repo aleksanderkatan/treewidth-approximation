@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * Due to technical limitations, all graphs must be normalized before showing
  * (vertices' ids should be in range from 0 to vertices_amount-1)
- * Furthermore, if all edges of vertices would be of the same color,
+ * Furthermore, if all edges of graph would be of the same color,
  * No matter the color the outcome will default to one static color.
  */
 public class PrefuseGraphShower {
@@ -63,15 +63,15 @@ public class PrefuseGraphShower {
     private static void showGraph(Graph graph, boolean writeNodeLabels, String title) {
         // special, default
         int[] baseShapes = new int[]
-                { Constants.SHAPE_ELLIPSE, Constants.SHAPE_CROSS };
+                {Constants.SHAPE_ELLIPSE, Constants.SHAPE_CROSS};
 
         // special, default
         int[] nodePalette = new int[]
-                { ColorLib.rgb(255, 20, 20), ColorLib.gray(25) };
+                {ColorLib.rgb(255, 20, 20), ColorLib.gray(25)};
 
         // special, default
         int[] edgePalette = new int[]
-                { ColorLib.rgb(255, 20, 20), ColorLib.gray(25) };
+                {ColorLib.rgb(255, 20, 20), ColorLib.gray(25)};
 
         SwingUtilities.invokeLater(() -> {
             Visualization vis = new Visualization();
@@ -94,19 +94,20 @@ public class PrefuseGraphShower {
             ActionList colors = new ActionList();
 
             DataColorAction nodeFill = new DataColorAction("graph.nodes", "node_colored",
-                    Constants.NOMINAL, VisualItem.FILLCOLOR, nodePalette);
+                                                           Constants.NOMINAL, VisualItem.FILLCOLOR, nodePalette);
 
             DataColorAction edgeFill = new DataColorAction("graph.edges", "edge_highlighted",
-                    Constants.NOMINAL, VisualItem.STROKECOLOR, edgePalette);
+                                                           Constants.NOMINAL, VisualItem.STROKECOLOR, edgePalette);
 
             colors.add(nodeFill);
             colors.add(edgeFill);
 
             if (writeNodeLabels) {
                 ColorAction text = new ColorAction("graph.nodes",
-                        VisualItem.TEXTCOLOR, ColorLib.gray(200));
+                                                   VisualItem.TEXTCOLOR, ColorLib.gray(200));
                 colors.add(text);
-            } else {
+            }
+            else {
                 DataShapeAction shape = new DataShapeAction("graph.nodes", "node_crossed", baseShapes);
                 colors.add(shape);
             }

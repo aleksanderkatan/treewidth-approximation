@@ -16,8 +16,7 @@ public class PartialSolution {
     }
 
     public void putSolution(SubProblem subProblem, SubSolution subSolution) {
-        if (subSolution.isValid())
-            map.put(subProblem, subSolution);
+        if (subSolution.isValid()) {map.put(subProblem, subSolution);}
     }
 
     public SubSolution getSolution(SubProblem subProblem) {
@@ -28,6 +27,6 @@ public class PartialSolution {
         return result;
     }
 
-    public Map<SubProblem, SubSolution> getMap() { return map; }
+    public Map<SubProblem, SubSolution> getMap() {return map;}
 
 }

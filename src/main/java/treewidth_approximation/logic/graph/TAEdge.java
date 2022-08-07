@@ -14,13 +14,14 @@ public class TAEdge implements Comparable<TAEdge> {
         this.v = max(u, v);
     }
 
-    public int getFirst() { return u; }
-    public int getSecond() { return v; }
+    public int getFirst() {return u;}
+
+    public int getSecond() {return v;}
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
         TAEdge edge = (TAEdge) o;
         return u == edge.u && v == edge.v;
     }

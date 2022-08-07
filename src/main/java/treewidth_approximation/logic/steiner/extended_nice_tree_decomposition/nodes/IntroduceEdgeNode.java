@@ -3,13 +3,17 @@ package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.n
 import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.misc.Partition;
-import treewidth_approximation.logic.misc.StringUtilities;
 import treewidth_approximation.logic.misc.SubsetExecutor;
+import treewidth_approximation.logic.misc.serialization.StringWriter;
 import treewidth_approximation.logic.steiner.SubProblem;
 import treewidth_approximation.logic.steiner.SubSolution;
 import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.NiceDecompositionNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class IntroduceEdgeNode extends NiceDecompositionNodeImpl {
     private final TAEdge edge;
@@ -23,7 +27,7 @@ public class IntroduceEdgeNode extends NiceDecompositionNodeImpl {
     public SubSolution computeSingular(SubProblem subProblem) {
         Set<Integer> X = subProblem.getX();
         Partition<Integer> partition = subProblem.getPartition();
-        NiceDecompositionNode child = (NiceDecompositionNode)children.iterator().next();
+        NiceDecompositionNode child = (NiceDecompositionNode) children.iterator().next();
         int u = edge.getFirst();
         int v = edge.getSecond();
 
@@ -37,7 +41,7 @@ public class IntroduceEdgeNode extends NiceDecompositionNodeImpl {
         // if either is in X
         // or both are in separate blocks of partition
         // edge cannot be used, return result from child
-        if (X.contains(u) || X.contains(v) || (partition.getSetIndexOfElement(u)!=partition.getSetIndexOfElement(v))) {
+        if (X.contains(u) || X.contains(v) || (partition.getSetIndexOfElement(u) != partition.getSetIndexOfElement(v))) {
             // subProblem is exactly the same
             SubSolution childSubSolution = child.getSolutions().getSolution(subProblem);
             return new SubSolution(childSubSolution.getCost(), null, List.of(childSubSolution));
@@ -49,8 +53,7 @@ public class IntroduceEdgeNode extends NiceDecompositionNodeImpl {
 
         // did not use
         SubSolution childSubSolution = child.getSolutions().getSolution(subProblem);
-        if (childSubSolution.isValid())
-            candidates.add(new SubSolution(childSubSolution.getCost(), null, List.of(childSubSolution)));
+        if (childSubSolution.isValid()) {candidates.add(new SubSolution(childSubSolution.getCost(), null, List.of(childSubSolution)));}
 
         // did use
         // for each subset of block \ {u, v}, check partition u+subset, v+rest
@@ -70,15 +73,14 @@ public class IntroduceEdgeNode extends NiceDecompositionNodeImpl {
             for (int uElem : USet) {
                 newMap.put(uElem, uIndex);
             }
-            int vIndex = uIndex+1;
+            int vIndex = uIndex + 1;
             for (int vElem : VSet) {
                 newMap.put(vElem, vIndex);
             }
             Partition<Integer> childPartition = new Partition<>(newMap);
             SubProblem childSubProblem = new SubProblem(X, childPartition);
             SubSolution childSubSolution1 = child.getSolutions().getSolution(childSubProblem);
-            if (childSubSolution1.isValid())
-                candidates.add(new SubSolution(childSubSolution1.getCost() + instance.getEdgeWeight(edge), edge, List.of(childSubSolution1)));
+            if (childSubSolution1.isValid()) {candidates.add(new SubSolution(childSubSolution1.getCost() + instance.getEdgeWeight(edge), edge, List.of(childSubSolution1)));}
             return null;
         });
 
@@ -100,6 +102,6 @@ public class IntroduceEdgeNode extends NiceDecompositionNodeImpl {
 
     @Override
     public String getLabel() {
-        return StringUtilities.setToString(vertices) + " - INTRODUCES EDGE " + edge.getFirst() + " " + edge.getSecond();
+        return StringWriter.writeSet(vertices) + " - INTRODUCES EDGE " + edge.getFirst() + " " + edge.getSecond();
     }
 }

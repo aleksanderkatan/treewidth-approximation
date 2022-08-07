@@ -6,7 +6,6 @@ import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.Ni
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
 import treewidth_approximation.logic.tree_decomposition.TreeDecompositionFinder;
 import treewidth_approximation.logic.tree_decomposition.TreeDecompositionVerifier;
-import treewidth_approximation.view.PrefuseGraphShower;
 
 import java.util.Set;
 
@@ -15,8 +14,9 @@ public class SteinerSolver {
         Set<TAEdge> edges = niceTreeDecomposition.solve();
         instance.setSelected(edges);
     }
+
     public static void solve(SteinerInstance instance, int treeWidthLimit) {
-        for (int i = 1; i<= treeWidthLimit; i++) {
+        for (int i = 1; i <= treeWidthLimit; i++) {
             // attempt to find tree-decomposition of width 4*i+3
             TreeDecompositionFinder.Result r = TreeDecompositionFinder
                     .findDecomposition(instance.getGraph(), i);
@@ -28,7 +28,7 @@ public class SteinerSolver {
             }
             TreeDecomposition decomposition = r.decomposition;
             // verify, that resulting decomposition is correct
-            assert TreeDecompositionVerifier.verify(decomposition, instance.getGraph(), i*4+3, false);
+            assert TreeDecompositionVerifier.verify(decomposition, instance.getGraph(), i * 4 + 3, false);
 
             // generate niceDecomposition from decomposition and solve
             NiceTreeDecomposition niceDecomposition = NiceTreeDecompositionGenerator.generate(r.decomposition, instance);

@@ -2,13 +2,18 @@ package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.n
 
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.misc.Partition;
-import treewidth_approximation.logic.misc.StringUtilities;
+import treewidth_approximation.logic.misc.serialization.StringWriter;
 import treewidth_approximation.logic.steiner.SubProblem;
 import treewidth_approximation.logic.steiner.SubSolution;
 import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.NiceDecompositionNode;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class JoinNode extends NiceDecompositionNodeImpl {
     @Override
@@ -30,7 +35,7 @@ public class JoinNode extends NiceDecompositionNodeImpl {
         // X to possible partitions of first and second child
         Map<Set<Integer>, List<Set<SubProblem>>> valid = new HashMap<>();
 
-        for (int i = 0; i< 2; i++) {
+        for (int i = 0; i < 2; i++) {
             NiceDecompositionNode currentChild = children.get(i);
 
             for (var entry : currentChild.getSolutions().getMap().entrySet()) {
@@ -82,6 +87,6 @@ public class JoinNode extends NiceDecompositionNodeImpl {
 
     @Override
     public String getLabel() {
-        return StringUtilities.setToString(vertices) + " - JOIN";
+        return StringWriter.writeSet(vertices) + " - JOIN";
     }
 }

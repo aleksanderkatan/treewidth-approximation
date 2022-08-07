@@ -2,7 +2,7 @@ package treewidth_approximation.logic.steiner;
 
 import treewidth_approximation.logic.misc.MapNormalizer;
 import treewidth_approximation.logic.misc.Partition;
-import treewidth_approximation.logic.misc.StringUtilities;
+import treewidth_approximation.logic.misc.serialization.StringWriter;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -20,13 +20,14 @@ public class SubProblem {
         this.partition = partition;
     }
 
-    public Set<Integer> getX() { return X; }
-    public Partition<Integer> getPartition() { return partition; }
+    public Set<Integer> getX() {return X;}
+
+    public Partition<Integer> getPartition() {return partition;}
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
         SubProblem other = (SubProblem) o;
         return X.equals(other.X) && partition.equals(other.partition);
     }
@@ -38,6 +39,6 @@ public class SubProblem {
 
     @Override
     public String toString() {
-        return "X: " + StringUtilities.setToString(X) + ", " + partition.toString();
+        return "X: " + StringWriter.writeSet(X) + ", " + partition.toString();
     }
 }

@@ -2,12 +2,17 @@ package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.n
 
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.misc.Partition;
-import treewidth_approximation.logic.misc.StringUtilities;
+import treewidth_approximation.logic.misc.serialization.StringWriter;
 import treewidth_approximation.logic.steiner.SubProblem;
 import treewidth_approximation.logic.steiner.SubSolution;
 import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.NiceDecompositionNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ForgetNode extends NiceDecompositionNodeImpl {
     private final int forgotten;
@@ -26,7 +31,7 @@ public class ForgetNode extends NiceDecompositionNodeImpl {
     public SubSolution computeSingular(SubProblem subProblem) {
         Set<Integer> X = subProblem.getX();
         Partition<Integer> partition = subProblem.getPartition();
-        NiceDecompositionNode child = (NiceDecompositionNode)children.iterator().next();
+        NiceDecompositionNode child = (NiceDecompositionNode) children.iterator().next();
 
         // if subProblem does have a terminal in X, return invalid solution
         for (int t : instance.getTerminals()) {
@@ -44,20 +49,20 @@ public class ForgetNode extends NiceDecompositionNodeImpl {
             childX.add(forgotten);
             SubProblem childSubProblemInX = new SubProblem(childX, new Partition<>(partition.getElements()));
             SubSolution childSubSolutionInX = child.getSolutions().getSolution(childSubProblemInX);
-            if (childSubSolutionInX.isValid())
-                candidates.add(new SubSolution(childSubSolutionInX.getCost(), null, List.of(childSubSolutionInX)));
+            if (childSubSolutionInX.isValid()) {candidates.add(new SubSolution(childSubSolutionInX.getCost(), null, List.of(childSubSolutionInX)));}
         }
 
         // in partition
-        for (int i = 0; i< partition.getAmountOfSets(); i++) {
+        for (int i = 0; i < partition.getAmountOfSets(); i++) {
             Map<Integer, Integer> newMap = new HashMap<>(partition.getElements());
             newMap.put(forgotten, i);
             Partition<Integer> childPartitionWithForgotten = new Partition<>(newMap);
             SubProblem childSubProblemWithForgotten = new SubProblem(new HashSet<>(X), childPartitionWithForgotten);
             SubSolution childSubSolutionWithForgotten = child.getSolutions().getSolution(childSubProblemWithForgotten);
-            if (childSubSolutionWithForgotten.isValid())
+            if (childSubSolutionWithForgotten.isValid()) {
                 candidates.add(new SubSolution(childSubSolutionWithForgotten.getCost(), null,
-                        List.of(childSubSolutionWithForgotten)));
+                                               List.of(childSubSolutionWithForgotten)));
+            }
         }
 
         SubSolution subSolution = SubSolution.getInvalidSolution();
@@ -71,6 +76,6 @@ public class ForgetNode extends NiceDecompositionNodeImpl {
 
     @Override
     public String getLabel() {
-        return StringUtilities.setToString(vertices) + " - FORGETS " + forgotten;
+        return StringWriter.writeSet(vertices) + " - FORGETS " + forgotten;
     }
 }

@@ -33,7 +33,8 @@ public class TreeDecompositionVerifier {
                 if (verbose) {
                     if (result == VertexState.FAILED) {
                         System.out.println("Vertex " + v + " has been forgotten multiple times.");
-                    } else {
+                    }
+                    else {
                         System.out.println("Vertex " + v + " has not been introduced.");
                     }
                 }
@@ -42,7 +43,7 @@ public class TreeDecompositionVerifier {
         }
 
         verifyEdges(decomposition.getRoot(), edges);
-        if (! edges.isEmpty()) {
+        if (!edges.isEmpty()) {
             if (verbose) {
                 System.out.println("Not all edges were considered");
                 for (TAEdge edge : edges) {
@@ -60,10 +61,10 @@ public class TreeDecompositionVerifier {
     }
 
     private static DecompositionNode verifyTreeWidth(DecompositionNode node, int expectedBagSize) {
-        if (node.getVertices().size() > expectedBagSize) return node;
+        if (node.getVertices().size() > expectedBagSize) {return node;}
         for (DecompositionNode child : node.getChildren()) {
             DecompositionNode result = verifyTreeWidth(child, expectedBagSize);
-            if (result != null) return result;
+            if (result != null) {return result;}
         }
         return null;
     }
@@ -80,7 +81,10 @@ public class TreeDecompositionVerifier {
     }
 
     private enum VertexState {
-        NOT_INTRODUCED, INTRODUCED, FORGOTTEN, FAILED
+        NOT_INTRODUCED,
+        INTRODUCED,
+        FORGOTTEN,
+        FAILED
     }
 
     private static VertexState verifyVertex(DecompositionNode node, int vertex) {
@@ -95,20 +99,20 @@ public class TreeDecompositionVerifier {
             states.put(result, states.get(result) + 1);
         }
 
-        if (states.get(VertexState.FAILED) > 0) return VertexState.FAILED;
+        if (states.get(VertexState.FAILED) > 0) {return VertexState.FAILED;}
         // only first three cases remaining
         if (states.get(VertexState.FORGOTTEN) > 0) {
-            if (states.get(VertexState.FORGOTTEN) > 1) return VertexState.FAILED;
-            if (states.get(VertexState.INTRODUCED) > 0) return VertexState.FAILED;
+            if (states.get(VertexState.FORGOTTEN) > 1) {return VertexState.FAILED;}
+            if (states.get(VertexState.INTRODUCED) > 0) {return VertexState.FAILED;}
             return VertexState.FORGOTTEN;
         }
         // only first two remaining
         if (states.get(VertexState.INTRODUCED) > 0) {
-            if (node.getVertices().contains(vertex)) return VertexState.INTRODUCED;
+            if (node.getVertices().contains(vertex)) {return VertexState.INTRODUCED;}
             return VertexState.FORGOTTEN;
         }
         // only first
-        if (node.getVertices().contains(vertex)) return VertexState.INTRODUCED;
+        if (node.getVertices().contains(vertex)) {return VertexState.INTRODUCED;}
         return VertexState.NOT_INTRODUCED;
     }
 }

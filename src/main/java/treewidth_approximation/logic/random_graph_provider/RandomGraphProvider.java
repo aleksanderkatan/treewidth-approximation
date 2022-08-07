@@ -7,6 +7,8 @@ import java.util.Set;
 
 public interface RandomGraphProvider {
     TAGraph getRandom(int vertices, double edgeChance);
+
     TAGraph getGridSubgraph(int x, int y, double edgeChance);
+
     Set<TAVertex> getRandomVertexSubset(TAGraph graph, int size);
 }

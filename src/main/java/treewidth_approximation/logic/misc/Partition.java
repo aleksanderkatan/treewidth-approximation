@@ -1,12 +1,19 @@
 package treewidth_approximation.logic.misc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 
 public class Partition<T> {
     private final List<Set<T>> sets;
     private final Map<T, Integer> elements;
 
-//    normalize.
     public Partition(Map<T, Integer> elements) {
         this.elements = elements;
         sets = new ArrayList<>();
@@ -27,7 +34,7 @@ public class Partition<T> {
 
         int currentSet = 0;
         for (T elem : elements.keySet()) {
-            if (newMap.containsKey(elem)) continue;
+            if (newMap.containsKey(elem)) {continue;}
 
             Queue<T> q = new LinkedList<>();
             q.add(elem);
@@ -52,7 +59,7 @@ public class Partition<T> {
         Map<T, Integer> newPartitionMap = new HashMap<>();
         for (var entry : elements.entrySet()) {
             int part = entry.getValue();
-            if (part == setIndex) continue;
+            if (part == setIndex) {continue;}
             if (part > setIndex) {
                 part--;
             }
@@ -75,14 +82,6 @@ public class Partition<T> {
         return sets.size();
     }
 
-    public boolean isEverySetNotEmpty() {
-        for (Set<T> set : sets) {
-            if (set.size() == 0)
-                return false;
-        }
-        return true;
-    }
-
     public Set<T> getSet(int index) {
         if (index >= sets.size()) {
             return new HashSet<>();
@@ -94,14 +93,12 @@ public class Partition<T> {
         return elements.get(element);
     }
 
-    public List<Set<T>> getSets() { return sets; }
-
-    public Map<T, Integer> getElements() { return elements; }
+    public Map<T, Integer> getElements() {return elements;}
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
         Partition<?> partition = (Partition<?>) o;
         return Objects.equals(sets, partition.sets) && Objects.equals(elements, partition.elements);
     }

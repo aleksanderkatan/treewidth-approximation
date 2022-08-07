@@ -3,7 +3,7 @@ package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.n
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.misc.Partition;
 import treewidth_approximation.logic.misc.PartitionExecutor;
-import treewidth_approximation.logic.misc.StringUtilities;
+import treewidth_approximation.logic.misc.serialization.StringWriter;
 import treewidth_approximation.logic.steiner.PartialSolution;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 import treewidth_approximation.logic.steiner.SubProblem;
@@ -65,7 +65,7 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
 
         // firstly, call compute() for all children
         for (DecompositionNode child : getChildren()) {
-            ((NiceDecompositionNode)child).compute();
+            ((NiceDecompositionNode) child).compute();
         }
 
         System.out.println("Compute start for: " + getLabel());
@@ -73,11 +73,12 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
         PartitionExecutor<Integer, Boolean> partitionExecutor = new PartitionExecutor<>(new ArrayList<>(vertices), 1, vertices.size(), false, partition -> {
             int amount = partition.getAmountOfSets();
             // either one of them is the set of vertices not chosen for a subtree, or all are chosen
-            for (int i = 0; i<= amount; i++) {
+            for (int i = 0; i <= amount; i++) {
                 Set<Integer> X;
                 if (i == amount) {
                     X = new HashSet<>();
-                } else {
+                }
+                else {
                     X = partition.getSet(i);
                 }
 
@@ -85,8 +86,6 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
 
                 SubProblem subProblem = new SubProblem(X, subProblemPartition);
                 SubSolution subSolution = computeSingular(subProblem);
-                // if subProblem does have a terminal in X, return invalid solution
-//                System.out.println("Computing " + getLabel() + " " + subProblem);
                 solution.putSolution(subProblem, subSolution);
             }
 
@@ -97,14 +96,14 @@ public abstract class NiceDecompositionNodeImpl implements NiceDecompositionNode
         // grandchild solutions are no longer needed
         for (DecompositionNode child : children) {
             for (DecompositionNode grandChild : child.getChildren()) {
-                ((NiceDecompositionNode)grandChild).getSolutions().dispose();
+                ((NiceDecompositionNode) grandChild).getSolutions().dispose();
             }
         }
     }
 
     @Override
     public String getLabel() {
-        return "NiceDecompositionNode - " + StringUtilities.setToString(vertices);
+        return "NiceDecompositionNode - " + StringWriter.writeSet(vertices);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class SubsetExecutor<T, S> {
 
         currentSet.add(elem);
         S result = split(depth + 1);
-        if (result != null) return result;
+        if (result != null) {return result;}
         currentSet.remove(elem);
         return split(depth + 1);
     }

@@ -19,18 +19,6 @@ public class TAHashVertex implements TAVertex {
         return id;
     }
 
-//    @Override
-//    public void setId(int id) {
-//        // they remember old id
-//        for (TAVertex neighbour : neighbours) {
-//            neighbour.removeNeighbour(this);
-//        }
-//        this.id = id;
-//        for (TAVertex neighbour : neighbours) {
-//            neighbour.addNeighbour(this);
-//        }
-//    }
-
     @Override
     public Set<TAVertex> getNeighbours() {
         return neighbours;

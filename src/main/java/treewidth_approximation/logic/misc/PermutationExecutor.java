@@ -12,7 +12,7 @@ public class PermutationExecutor<S> {
     public PermutationExecutor(int elementsAmount, Function<Permutation, S> action) {
         this.elementsAmount = elementsAmount;
         this.perm = new ArrayList<>();
-        for (int i = 0; i< elementsAmount; i++) {
+        for (int i = 0; i < elementsAmount; i++) {
             perm.add(i);
         }
         this.action = action;
@@ -23,13 +23,13 @@ public class PermutationExecutor<S> {
             Permutation permutation = new Permutation(new ArrayList<>(perm));
             return action.apply(permutation);
         }
-        for (int i = depth; i< elementsAmount; i++) {
+        for (int i = depth; i < elementsAmount; i++) {
             int temp = perm.get(i);
             perm.set(i, perm.get(depth));
             perm.set(depth, temp);
 
             S result = shuffle(depth + 1);
-            if (result != null) return result;
+            if (result != null) {return result;}
 
             temp = perm.get(i);
             perm.set(i, perm.get(depth));

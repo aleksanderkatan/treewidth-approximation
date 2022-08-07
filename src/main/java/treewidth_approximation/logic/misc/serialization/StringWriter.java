@@ -1,4 +1,4 @@
-package treewidth_approximation.logic.graph.graph_serialization;
+package treewidth_approximation.logic.misc.serialization;
 
 import treewidth_approximation.logic.graph.TAEdge;
 import treewidth_approximation.logic.graph.TAGraph;
@@ -6,9 +6,10 @@ import treewidth_approximation.logic.graph.TAVertex;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GraphWriter {
+public class StringWriter {
     public static String writeGraph(TAGraph graph) {
         StringBuilder result = new StringBuilder();
 
@@ -70,5 +71,15 @@ public class GraphWriter {
         }
 
         return new String(result);
+    }
+
+    public static String writeSet(Set<Integer> set) {
+        if (set.isEmpty()) {return "EMPTY";}
+        StringBuilder s = new StringBuilder();
+        for (Integer id : set) {
+            s.append(id).append(", ");
+        }
+        s.delete(s.length() - 2, s.length() - 1);
+        return new String(s);
     }
 }

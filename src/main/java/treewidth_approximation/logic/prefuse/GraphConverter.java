@@ -19,7 +19,7 @@ public class GraphConverter {
         Graph res = getGraphBase();
 
         Node[] nodes = new Node[tagraph.getVertices().size()];
-        for (int i = 0; i< tagraph.getVertices().size(); i++) {
+        for (int i = 0; i < tagraph.getVertices().size(); i++) {
             nodes[i] = res.addNode();
         }
 
@@ -39,7 +39,7 @@ public class GraphConverter {
                 if (id1 < id2) {
                     res.addEdge(id1, id2);
                     Edge e = res.getEdge(nodes[id1], nodes[id2]);
-//                    // inverted since palettes are weird
+                    //                    // inverted since palettes are weird
                     e.set("edge_highlighted", highlightedEdges.contains(new TAEdge(id1, id2)) ? 0 : 1);
                     e.set(Graph.DEFAULT_SOURCE_KEY, id1);
                     e.set(Graph.DEFAULT_TARGET_KEY, id2);
@@ -52,7 +52,7 @@ public class GraphConverter {
     public static Graph getGraphBase() {
         Table nodeTable = new Table();
 
-//        nodeTable.addColumn(Graph.DEFAULT_NODE_KEY, int.class );
+        //        nodeTable.addColumn(Graph.DEFAULT_NODE_KEY, int.class );
         nodeTable.addColumn("node_colored", Integer.class);
         nodeTable.addColumn("node_crossed", Integer.class);
         nodeTable.addColumn("node_label", String.class);
@@ -63,6 +63,6 @@ public class GraphConverter {
         edgeTable.addColumn(Graph.DEFAULT_TARGET_KEY, int.class);
         edgeTable.addColumn("edge_highlighted", Integer.class);
 
-        return new Graph(nodeTable, edgeTable,false);
+        return new Graph(nodeTable, edgeTable, false);
     }
 }

@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class TreeDecompositionImpl implements TreeDecomposition {
     private final DecompositionNode root;
 
-    public TreeDecompositionImpl(DecompositionNode root) { this.root = root; }
+    public TreeDecompositionImpl(DecompositionNode root) {this.root = root;}
 
     @Override
-    public DecompositionNode getRoot() { return root; }
+    public DecompositionNode getRoot() {return root;}
 
     @Override
     public TreeDecomposition copy() {

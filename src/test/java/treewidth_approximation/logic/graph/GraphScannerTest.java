@@ -1,7 +1,7 @@
 package treewidth_approximation.logic.graph;
 
 import org.junit.jupiter.api.Test;
-import treewidth_approximation.logic.graph.graph_serialization.GraphScanner;
+import treewidth_approximation.logic.misc.serialization.StringScanner;
 import treewidth_approximation.logic.steiner.SteinerInstance;
 
 import java.util.Set;
@@ -13,7 +13,7 @@ public class GraphScannerTest {
     public void testEmptyGraph() {
         String graphString = "0 0";
 
-        TAGraph graph = GraphScanner.scanGraph(graphString, TAHashGraph::new);
+        TAGraph graph = StringScanner.scanGraph(graphString, TAHashGraph::new);
 
         assertEquals(0, graph.getVertexAmount());
         assertEquals(0, graph.getEdgeAmount());
@@ -23,7 +23,7 @@ public class GraphScannerTest {
     public void testGraphOnlyVertices() {
         String graphString = "3 0\n";
 
-        TAGraph graph = GraphScanner.scanGraph(graphString, TAHashGraph::new);
+        TAGraph graph = StringScanner.scanGraph(graphString, TAHashGraph::new);
 
         assertEquals(3, graph.getVertexAmount());
         assertNotNull(graph.getVertexById(0));
@@ -38,7 +38,7 @@ public class GraphScannerTest {
                 "1 2\n" +
                 "1 0\n";
 
-        TAGraph graph = GraphScanner.scanGraph(graphString, TAHashGraph::new);
+        TAGraph graph = StringScanner.scanGraph(graphString, TAHashGraph::new);
 
         assertEquals(3, graph.getVertexAmount());
         assertNotNull(graph.getVertexById(0));
@@ -58,7 +58,7 @@ public class GraphScannerTest {
                 "2\n" +
                 "0";
 
-        SteinerInstance instance = GraphScanner.scanSteinerInstance(instanceString, TAHashGraph::new);
+        SteinerInstance instance = StringScanner.scanSteinerInstance(instanceString, TAHashGraph::new);
         TAGraph graph = instance.getGraph();
         Set<Integer> terminals = instance.getTerminals();
         Set<TAEdge> selectedEdges = instance.getSelected();

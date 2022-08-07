@@ -9,17 +9,13 @@ public class Permutation {
         this.elements = elements;
     }
 
-    public List<Integer> getElements() { return elements; }
-
-    public int get(int i) { return elements.get(i); }
+    public int get(int i) {return elements.get(i);}
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this)
-            return true;
+        if (obj == this) {return true;}
 
-        if (!(obj instanceof Permutation))
-            return false;
+        if (!(obj instanceof Permutation)) {return false;}
 
         return elements.equals(((Permutation) obj).elements);
     }

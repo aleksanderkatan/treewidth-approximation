@@ -10,7 +10,7 @@ import static java.lang.Math.min;
 
 // T - partitions of this are considered
 // S - return type
-public class PartitionExecutor<T, S>{
+public class PartitionExecutor<T, S> {
     private final List<T> elements;
     private final int minPartitionsAmount;
     private final int maxPartitionsAmount;
@@ -31,18 +31,17 @@ public class PartitionExecutor<T, S>{
     }
 
     private S split(int depth, int currentAmountOfSets) {
-        if (currentAmountOfSets > maxPartitionsAmount) return null;
+        if (currentAmountOfSets > maxPartitionsAmount) {return null;}
 
         if (depth == elements.size()) {
             Partition<T> partition = new Partition<>(setsOfElements);
-            if (!(minPartitionsAmount <= currentAmountOfSets && currentAmountOfSets <= maxPartitionsAmount))
-                return null;
+            if (!(minPartitionsAmount <= currentAmountOfSets && currentAmountOfSets <= maxPartitionsAmount)) {return null;}
 
             if (setOrderMatters) {
                 // we have a partition, let's now order it in every possible way
                 PermutationExecutor<S> permutationExecutor = new PermutationExecutor<>(currentAmountOfSets, (permutation) -> {
                     Map<T, Integer> orderedPartitionMap = new HashMap<>();
-                    for (int i = 0; i< currentAmountOfSets; i++) {
+                    for (int i = 0; i < currentAmountOfSets; i++) {
                         for (T elem : partition.getSet(i)) {
                             orderedPartitionMap.put(elem, permutation.get(i));
                         }
@@ -52,7 +51,8 @@ public class PartitionExecutor<T, S>{
                     return action.apply(orderedPartition);
                 });
                 return permutationExecutor.run();
-            } else {
+            }
+            else {
                 return action.apply(partition);
             }
         }
@@ -60,7 +60,7 @@ public class PartitionExecutor<T, S>{
         for (int i = 0; i < min(currentAmountOfSets + 1, maxPartitionsAmount); i++) {
             setsOfElements.put(elem, i);
             S result = split(depth + 1, (i == currentAmountOfSets) ? currentAmountOfSets + 1 : currentAmountOfSets);
-            if (result != null) return result;
+            if (result != null) {return result;}
         }
         return null;
     }

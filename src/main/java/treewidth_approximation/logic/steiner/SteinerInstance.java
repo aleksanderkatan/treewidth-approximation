@@ -20,10 +20,9 @@ public class SteinerInstance {
         this.selected = new HashSet<>();
     }
 
-    public TAGraph getGraph() { return graph; }
+    public TAGraph getGraph() {return graph;}
 
-    public Set<Integer> getTerminals() { return terminals; }
-    public boolean isTerminal(int v) { return terminals.contains(v); }
+    public Set<Integer> getTerminals() {return terminals;}
 
     public Double getEdgeWeight(TAEdge edge) {
         int u = edge.getFirst();
@@ -33,8 +32,7 @@ public class SteinerInstance {
         }
         Double result;
         result = weights.get(new TAEdge(u, v));
-        if (result != null)
-            return result;
+        if (result != null) {return result;}
         return 1.0;
     }
 
@@ -43,5 +41,5 @@ public class SteinerInstance {
         this.selected.addAll(selected);
     }
 
-    public Set<TAEdge> getSelected() { return selected; }
+    public Set<TAEdge> getSelected() {return selected;}
 }

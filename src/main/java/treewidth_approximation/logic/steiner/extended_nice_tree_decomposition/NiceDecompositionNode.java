@@ -9,9 +9,14 @@ import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
 
 public interface NiceDecompositionNode extends DecompositionNode {
     void setInstance(SteinerInstance instance);
+
     void updateSubgraph(TAGraph childSubgraph);
+
     TAGraph getSubgraph();
+
     void compute();
+
     SubSolution computeSingular(SubProblem subProblem);
+
     PartialSolution getSolutions();
 }

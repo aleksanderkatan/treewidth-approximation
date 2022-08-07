@@ -3,7 +3,7 @@ package treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.n
 import treewidth_approximation.logic.graph.TAGraph;
 import treewidth_approximation.logic.graph.TAHashGraph;
 import treewidth_approximation.logic.misc.Partition;
-import treewidth_approximation.logic.misc.StringUtilities;
+import treewidth_approximation.logic.misc.serialization.StringWriter;
 import treewidth_approximation.logic.steiner.SubProblem;
 import treewidth_approximation.logic.steiner.SubSolution;
 
@@ -56,6 +56,6 @@ public class LeafNode extends NiceDecompositionNodeImpl {
 
     @Override
     public String getLabel() {
-        return StringUtilities.setToString(vertices) + " - LEAF";
+        return StringWriter.writeSet(vertices) + " - LEAF";
     }
 }
