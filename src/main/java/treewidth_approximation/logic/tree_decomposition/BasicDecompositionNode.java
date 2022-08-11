@@ -5,11 +5,11 @@ import treewidth_approximation.logic.misc.serialization.StringWriter;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DecompositionNodeImpl implements DecompositionNode {
+public class BasicDecompositionNode implements DecompositionNode {
     private final Set<Integer> vertices;
     private final Set<DecompositionNode> children;
 
-    public DecompositionNodeImpl(Set<Integer> vertices) {
+    public BasicDecompositionNode(Set<Integer> vertices) {
         this.vertices = vertices;
         this.children = new HashSet<>();
     }

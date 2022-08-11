@@ -19,28 +19,28 @@ public class TreeDecompositionFinder {
     }
 
     /**
-     * either finds a tree decomposition of treewidth at most 4*actualTreeWidth+3,
+     * either finds a tree decomposition of width at most 4*actualTreeWidth+3,
      * or proves that tree-width is bigger than actualTreeWidth
      * by returning a set of size 3*(actualTreeWidth+1) that doesn't have a balanced separator of size actualTreeWidth+1
      */
-    public static Result findDecomposition(TAGraph originalGraph, int actualTreeWidth) {
+    public static Result find(TAGraph originalGraph, int actualTreeWidth) {
         int bagSize = actualTreeWidth + 1;
-        DecompositionNode root = new DecompositionNodeImpl(new HashSet<>());
+        DecompositionNode root = new BasicDecompositionNode(new HashSet<>());
 
         for (TAGraph subgraph : originalGraph.splitIntoConnectedComponents(false)) {
             Set<Integer> W = new HashSet<>();
             extendSet(W, subgraph.getVerticesIds(), 3 * bagSize);
-            Result r = find(subgraph, W, actualTreeWidth);
+            Result r = findDecomposition(subgraph, W, actualTreeWidth);
             if (!r.successful) {return r;}
             root.addChild(r.decomposition.getRoot());
         }
         Result r = new Result();
         r.successful = true;
-        r.decomposition = new TreeDecompositionImpl(root);
+        r.decomposition = new BasicTreeDecomposition(root);
         return r;
     }
 
-    private static Result find(TAGraph graph, Set<Integer> W, int actualTreeWidth) {
+    private static Result findDecomposition(TAGraph graph, Set<Integer> W, int actualTreeWidth) {
         int bagSize = actualTreeWidth + 1;
         int maxSeparatorSize = bagSize;
         int minWSize = bagSize * 3; // could possibly be bagSize+1, but still may grow in sub-problems up to 3*bagSize
@@ -54,8 +54,8 @@ public class TreeDecompositionFinder {
         // if graph is small enough - pack it into a single bag
         if (graph.getVertices().size() <= maxBagSize) {
             Set<Integer> bag = graph.getVerticesIds();
-            DecompositionNode node = new DecompositionNodeImpl(bag);
-            TreeDecomposition decomposition = new TreeDecompositionImpl(node);
+            DecompositionNode node = new BasicDecompositionNode(bag);
+            TreeDecomposition decomposition = new BasicTreeDecomposition(node);
             result.successful = true;
             result.decomposition = decomposition;
             return result;
@@ -90,7 +90,7 @@ public class TreeDecompositionFinder {
             extendSet(newW, newVertices, minWSize);
             // !!!
 
-            Result r = find(newGraph, newW, actualTreeWidth);
+            Result r = findDecomposition(newGraph, newW, actualTreeWidth);
             if (!r.successful) {
                 r.decomposition = null;
                 return r;
@@ -101,12 +101,12 @@ public class TreeDecompositionFinder {
         // new decomposition is a new bag consisting of (separator+W) connected to roots of other decompositions
         Set<Integer> rootBag = new HashSet<>(separator);
         rootBag.addAll(W);
-        DecompositionNode node = new DecompositionNodeImpl(rootBag);
+        DecompositionNode node = new BasicDecompositionNode(rootBag);
         for (TreeDecomposition decomposition : decompositions) {
             node.addChild(decomposition.getRoot());
         }
         result.successful = true;
-        result.decomposition = new TreeDecompositionImpl(node);
+        result.decomposition = new BasicTreeDecomposition(node);
         return result;
     }
 

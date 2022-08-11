@@ -40,7 +40,7 @@ public class SeparatorFinder {
                     Set<Integer> CSet = new HashSet<>(C);
 
                     TAGraph newGraph = graph.copyRestricting(CSet);
-                    FlowNetwork network = new FlowNetwork(newGraph, ASet, BSet);
+                    TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(newGraph, ASet, BSet);
                     int maxSeparatorSize = order - C.size();
                     int maxFlow = network.increaseCurrentFlow(maxSeparatorSize + 1);
                     if (maxFlow > maxSeparatorSize) {return null;}

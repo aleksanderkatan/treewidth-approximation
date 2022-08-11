@@ -8,9 +8,9 @@ import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.no
 import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes.JoinNode;
 import treewidth_approximation.logic.steiner.extended_nice_tree_decomposition.nodes.LeafNode;
 import treewidth_approximation.logic.tree_decomposition.DecompositionNode;
-import treewidth_approximation.logic.tree_decomposition.DecompositionNodeImpl;
+import treewidth_approximation.logic.tree_decomposition.BasicDecompositionNode;
 import treewidth_approximation.logic.tree_decomposition.TreeDecomposition;
-import treewidth_approximation.logic.tree_decomposition.TreeDecompositionImpl;
+import treewidth_approximation.logic.tree_decomposition.BasicTreeDecomposition;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,9 +30,9 @@ public class NiceTreeDecompositionGenerator {
         addJoins(copy.getRoot());
 
         // make it so every leaf and root are empty
-        DecompositionNode newRoot = new DecompositionNodeImpl(new HashSet<>());
+        DecompositionNode newRoot = new BasicDecompositionNode(new HashSet<>());
         newRoot.addChild(copy.getRoot());
-        copy = new TreeDecompositionImpl(newRoot);
+        copy = new BasicTreeDecomposition(newRoot);
         addLeaves(copy.getRoot());
 
         // terminal to be added to every decomposition node
@@ -87,8 +87,8 @@ public class NiceTreeDecompositionGenerator {
             }
 
             for (int i = 0; i < children.size() - 1; i++) {
-                DecompositionNode left = new DecompositionNodeImpl(node.getVertices());
-                DecompositionNode right = new DecompositionNodeImpl(node.getVertices());
+                DecompositionNode left = new BasicDecompositionNode(node.getVertices());
+                DecompositionNode right = new BasicDecompositionNode(node.getVertices());
                 left.addChild(children.get(i));
                 current.addChild(left);
                 current.addChild(right);
@@ -100,7 +100,7 @@ public class NiceTreeDecompositionGenerator {
 
     private static void addLeaves(DecompositionNode node) {
         if (node.getChildren().size() == 0) {
-            node.addChild(new DecompositionNodeImpl(new HashSet<>()));
+            node.addChild(new BasicDecompositionNode(new HashSet<>()));
         }
         else {
             for (DecompositionNode child : node.getChildren()) {
@@ -128,7 +128,7 @@ public class NiceTreeDecompositionGenerator {
             for (Integer v : toIntroduce) {
                 Set<Integer> newBag = new HashSet<>(node.getVertices());
                 newBag.remove(v);
-                DecompositionNode newNode = new DecompositionNodeImpl(newBag);
+                DecompositionNode newNode = new BasicDecompositionNode(newBag);
                 node.addChild(newNode);
                 node = newNode;
             }
@@ -136,7 +136,7 @@ public class NiceTreeDecompositionGenerator {
             for (Integer v : toForget) {
                 Set<Integer> newBag = new HashSet<>(node.getVertices());
                 newBag.add(v);
-                DecompositionNode newNode = new DecompositionNodeImpl(newBag);
+                DecompositionNode newNode = new BasicDecompositionNode(newBag);
                 node.addChild(newNode);
                 node = newNode;
             }

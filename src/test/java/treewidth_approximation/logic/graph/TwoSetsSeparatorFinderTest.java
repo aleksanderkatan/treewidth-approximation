@@ -1,7 +1,7 @@
 package treewidth_approximation.logic.graph;
 
 import org.junit.jupiter.api.Test;
-import treewidth_approximation.logic.separator_finder.FlowNetwork;
+import treewidth_approximation.logic.separator_finder.TwoSetsSeparatorFinder;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FlowNetworkTest {
+public class TwoSetsSeparatorFinderTest {
     @Test
     void testNotConnected() {
         TAGraph g = new TAHashGraph();
@@ -22,7 +22,7 @@ public class FlowNetworkTest {
         Set<Integer> B = new HashSet<>();
         B.add(30);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         int result = network.increaseCurrentFlow(10);
@@ -45,7 +45,7 @@ public class FlowNetworkTest {
         Set<Integer> B = new HashSet<>();
         B.add(30);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         int result = network.increaseCurrentFlow(10);
@@ -71,7 +71,7 @@ public class FlowNetworkTest {
         Set<Integer> B = new HashSet<>();
         B.add(4);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         int result = network.increaseCurrentFlow(10);
@@ -101,7 +101,7 @@ public class FlowNetworkTest {
         B.add(3);
         B.add(6);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         int result = network.increaseCurrentFlow(10);
@@ -132,7 +132,7 @@ public class FlowNetworkTest {
         Set<Integer> B = new HashSet<>();
         B.add(4);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         int result = network.increaseCurrentFlow(10);
@@ -170,7 +170,7 @@ public class FlowNetworkTest {
         B.add(7);
         B.add(8);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         int result = network.increaseCurrentFlow(10);
@@ -200,7 +200,7 @@ public class FlowNetworkTest {
         B.add(3);
         B.add(6);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         int result = network.increaseCurrentFlow(1);
@@ -223,11 +223,11 @@ public class FlowNetworkTest {
         Set<Integer> B = new HashSet<>();
         B.add(3);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         network.increaseCurrentFlow(1);
-        assertThrows(FlowNetwork.FlowNotMaximalException.class, network::getSeparatorIds);
+        assertThrows(TwoSetsSeparatorFinder.FlowNotMaximalException.class, network::getSeparatorIds);
     }
 
     @Test
@@ -244,7 +244,7 @@ public class FlowNetworkTest {
         Set<Integer> B = new HashSet<>();
         B.add(3);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         network.increaseCurrentFlow(2);
@@ -286,7 +286,7 @@ public class FlowNetworkTest {
         B.add(8);
         B.add(9);
 
-        FlowNetwork network = new FlowNetwork(g, A, B);
+        TwoSetsSeparatorFinder network = new TwoSetsSeparatorFinder(g, A, B);
 
 
         network.increaseCurrentFlow(10);

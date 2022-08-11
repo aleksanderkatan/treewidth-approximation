@@ -45,7 +45,7 @@ public class IntroduceNode extends NiceDecompositionNodeImpl {
                 return SubSolution.getInvalidSolution();
             }
             else {
-                // introduced is in his set in partition
+                // introduced is in his personal set in partition
                 Partition<Integer> childPartition = partition.copyRestrictingElement(introduced);
                 SubProblem childSubProblem = new SubProblem(X, childPartition);
                 SubSolution childSubSolution = child.getSolutions().getSolution(childSubProblem);
@@ -57,8 +57,10 @@ public class IntroduceNode extends NiceDecompositionNodeImpl {
         childX.remove(introduced);
         SubProblem childSubProblem = new SubProblem(childX, partition);
         SubSolution childSubSolution = child.getSolutions().getSolution(childSubProblem);
-        if (childSubSolution.isValid()) {return new SubSolution(childSubSolution.getCost(), null, List.of(childSubSolution));}
-        else {return SubSolution.getInvalidSolution();}
+        if (childSubSolution.isValid()) {
+            return new SubSolution(childSubSolution.getCost(), null, List.of(childSubSolution));
+        }
+        return SubSolution.getInvalidSolution();
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-public class FlowNetwork {
+public class TwoSetsSeparatorFinder {
     private static final Integer INFINITY = 1 << 30;
 
     private static class Edge {
@@ -44,7 +44,7 @@ public class FlowNetwork {
     private final List<Vertex> vertices; // [0] - source, [1] - target
     private List<Integer> separatorIds;
 
-    public FlowNetwork(TAGraph graph, Set<Integer> A, Set<Integer> B) {
+    public TwoSetsSeparatorFinder(TAGraph graph, Set<Integer> A, Set<Integer> B) {
         // assumes there are no edges between A and B
         vertices = new ArrayList<>();
         // inIndex of a vertex

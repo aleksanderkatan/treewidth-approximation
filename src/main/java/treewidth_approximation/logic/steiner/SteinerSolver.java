@@ -19,7 +19,7 @@ public class SteinerSolver {
         for (int i = 1; i <= treeWidthLimit; i++) {
             // attempt to find tree-decomposition of width 4*i+3
             TreeDecompositionFinder.Result r = TreeDecompositionFinder
-                    .findDecomposition(instance.getGraph(), i);
+                    .find(instance.getGraph(), i);
 
             if (!r.successful) {
                 // tree-width greater than i

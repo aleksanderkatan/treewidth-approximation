@@ -8,7 +8,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GraphScannerTest {
+public class StringScannerTest {
     @Test
     public void testEmptyGraph() {
         String graphString = "0 0";
